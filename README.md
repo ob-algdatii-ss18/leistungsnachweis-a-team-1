@@ -3,6 +3,6 @@
              <br> - Ömer Ergan, ergan@hm.edu
              <br> - Paul Masch, pmasch@hm.edu
 * Themen Vorschläge: <br> - Handeling von Hash-Kollisionen
-                     <br> - Kürzeste Strecke in einem Labyrint
+                     <br> - Kürzeste Strecke mit dem A* Algorithmus
 * Zeitslot für Zwischenstand:<br> - TODO
                              <br> - Verantwortliches Mitglied
