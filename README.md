@@ -5,4 +5,4 @@
              <br> - 
 * Themen Vorschläge: <br> - Nothing here yet :(
 * Zeitslot für Zwischenstand:<br> - TODO
-                             <br> - Verantwortliches Mitglied: 
+                             <br> - Verantwortliches Mitglied
