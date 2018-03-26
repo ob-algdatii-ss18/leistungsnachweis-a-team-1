@@ -6,15 +6,19 @@ sudo: required
 dist: trusty     
 
 before_install:
+    # Add and update Qt 5.10.1 Repository
     - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
     - sudo apt-get update -qq
     
 install:
+    # Install Qt 5.10.1
     - sudo apt-get --yes install qt510base 
     
 script:
+    # Setup Qt Variables
     - QTDIR="/opt/qt510"
     - PATH="$QTDIR/bin:$PATH"
     - source /opt/qt510/bin/qt510-env.sh
 
-   
+    # build the project
+    - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
