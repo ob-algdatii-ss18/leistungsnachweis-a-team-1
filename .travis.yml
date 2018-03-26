@@ -1,0 +1,18 @@
+language: cpp
+os: linux
+compiler: clang
+
+sudo: required
+dist: trusty     
+
+before_install:
+    - sudo add_apt_repository --yes ppa:beineri/opt-qt5.10.1-trusty
+    - sudo apt-get update -qq
+    
+install:
+    - sudo apt-get --yes install qt510base 
+    
+script:
+    - QTDIR="/opt/qt510"
+    - PATH="$QTDIR/bin:$PATH"
+    - source /opt/qt55/bin/qt510-env.sh
