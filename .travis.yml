@@ -15,6 +15,6 @@ install:
 script:
     - QTDIR="/opt/qt510"
     - PATH="$QTDIR/bin:$PATH"
-    - source /opt/qt55/bin/qt510-env.sh
+    - source /opt/qt510/bin/qt510-env.sh
 
    
