@@ -1,5 +1,4 @@
 #include <iostream>
-#include <windows.h>
 
 extern int func2();
 
@@ -7,10 +6,10 @@ extern int func2();
 #include "MainWindow.h"
 
 int main(int argc, char* argv[]) {
-	QScopedPointer<QCoreApplication> app(new QCoreApplication(argc, argv));
-	func2();
-	MainWindow window;
-	window.show();
+    QScopedPointer<QApplication> app(new QApplication(argc, argv));
+    func2();
+    MainWindow window;
+    window.show();
 
-	return app->exec();
+    return app->exec();
 }
