@@ -9,6 +9,8 @@ before_install:
     # Add and update Qt 5.10.1 Repository
     - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
     - sudo apt-get update -qq
+    # Coveralls install
+    - pip install --user cpp-coveralls
     
 install:
     # Install Qt 5.10.1
@@ -20,5 +22,14 @@ script:
     - PATH="$QTDIR/bin:$PATH"
     - source /opt/qt510/bin/qt510-env.sh
 
+    # Create new build directory
+    - cmake -H. -Bbuild
+    - cd build
+
     # build the project
-    - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+    - cmake --build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+
+    # test the project
+    - ctest
+after_success:
+    - coveralls --exclude test --exclude doc -gcov --gcov-options '\-lp'

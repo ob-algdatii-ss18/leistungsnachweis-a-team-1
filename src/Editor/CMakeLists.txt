@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.6)
 
+project(Editor)
+
+# The editor version
+set (MAJOR_VERSION 0)
+set (MINOR_VERSION 1)
+
+# Find all qt packages
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
