@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.1)
+cmake_minimum_required(VERSION 3.6)
 
 set(PROJECT_NAME Alogdat_labyrinth)
 project (${PROJECT_NAME})
