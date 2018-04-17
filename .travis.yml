@@ -34,7 +34,7 @@ script:
     - cd build
 
     # Execute the build
-    cmake --build ../
+    - cmake --build ../
 
     # Test the project
     - ctest
