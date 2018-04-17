@@ -11,25 +11,33 @@ before_install:
     - sudo apt-get update -qq
     # Coveralls install
     - pip install --user cpp-coveralls
-    
+
 install:
     # Install Qt 5.10.1
-    - sudo apt-get --yes install qt510base 
+    - sudo apt-get --yes install qt510base
     
 script:
+    # Get the cmake version
+    - which cmake
+    - cmake --version
+
     # Setup Qt Variables
     - QTDIR="/opt/qt510"
     - PATH="$QTDIR/bin:$PATH"
     - source /opt/qt510/bin/qt510-env.sh
 
+    # Execute cmake configuration
+    - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+
     # Create new build directory
-    - cmake -H. -Bbuild
+    - mkdir build
     - cd build
 
-    # build the project
-    - cmake --build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+    # Execute the build
+    cmake --build ../
 
-    # test the project
+    # Test the project
     - ctest
+
 after_success:
     - coveralls --exclude test --exclude doc -gcov --gcov-options '\-lp'

@@ -1,4 +1,5 @@
 #include "EditorTest.h"
+#include <gmock/gmock.h>
 
 EditorTest::EditorTest() {
 
@@ -17,5 +18,5 @@ void EditorTest::TearDown() {
 }
 
 TEST_F(EditorTest, ByDefaultTrue) {
-
+    ASSERT_TRUE(true);
 }

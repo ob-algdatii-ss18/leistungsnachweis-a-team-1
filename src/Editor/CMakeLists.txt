@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.6)
 project(Editor)
 
 # The editor version
-set (MAJOR_VERSION 0)
-set (MINOR_VERSION 1)
+set (VERSION_MAJOR 0)
+set (VERSION_MINOR 1)
 
 # Find all qt packages
 find_package(Qt5Widgets REQUIRED)
@@ -13,6 +13,7 @@ find_package(Qt5Gui REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC ON)
 
 set(Editor_src ${PROJECT_SOURCE_DIR}/mainwindow.cpp)
 set(Editor_hdr ${PROJECT_SOURCE_DIR}/mainwindow.h)
