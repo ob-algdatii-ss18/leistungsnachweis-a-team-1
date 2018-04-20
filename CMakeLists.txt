@@ -16,11 +16,6 @@ set(CMAKE_CXX_FLAGS "-g -Wall")
 option(COVERALLS "Generate coveralls data" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
-if (COVERALLS)
-    include(Coveralls)
-    coveralls_turn_on_coverage()
-endif()
-
 # Set the QT Library
 # set(CMAKE_PREFIX_PATH "F:\\LIBRARIES\\Qt\\5.10.1\\mingw53_32;F:\\LIBRARIES\\googletest")
 add_subdirectory(src/Editor)
@@ -32,18 +27,8 @@ add_subdirectory(src/Engine)
 enable_testing()
 include(CTest)
 
-
 # download and build googletest
 include(cmake/googletest-download.cmake)
-
-if (COVERALLS)
-    set(COVERAGE_SRCS ${PROJECT_ENGINE_SRC_DIR}/Graph.cpp ${PROJECT_ENGINE_SRC_DIR}/foo1.cpp ${PROJECT_EDITOR_SRC_DIR}/mainwindow.cpp
-    ${PROJECT_EDITOR_SRC_DIR}/main.cpp)
-    coveralls_setup(
-        "${COVERAGE_SRCS}"
-        ON
-    )
-endif()
 
 add_subdirectory(test/Editor)
 add_subdirectory(test/Engine)

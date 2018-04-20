@@ -47,6 +47,6 @@ script:
     - cmake --build .
 
     # run tests
-    - ctest
+    - ./test/Editor/testEditorRun
 
-    - coveralls --root . -E".*CMakeFiles.*"
+    - coveralls --root . -E".*CMakeFiles.*" -E"*google*" -E"*autogen*"
