@@ -52,5 +52,5 @@ script:
     - ./test/Engine/testEngineRun
 
 after_success:
-    - coveralls --root ./test/Editor/ -E".*CMakeFiles.*"
-    - coveralls --root ./test/Engine/ -E".*CMakeFiles.*"
+    - coveralls --root ../src/Editor/ -E".*CMakeFiles.*"
+    - coveralls --root ../src/Engine/ -E".*CMakeFiles.*"
