@@ -4,8 +4,8 @@ set(PROJECT_NAME Alogdat_labyrinth)
 project (${PROJECT_NAME})
 
 # set the project directories variables
-set (PROJECT_EDITOR_SRC_DIR ${PROJECT_SOURCE_DIR}/Editor)
-set (PROJECT_ENGINE_SRC_DIR ${PROJECT_SOURCE_DIR}/Engine)
+set (PROJECT_EDITOR_SRC_DIR ${PROJECT_SOURCE_DIR}/src/Editor)
+set (PROJECT_ENGINE_SRC_DIR ${PROJECT_SOURCE_DIR}/src/Engine)
 
 # set c++17 standard
 set(CMAKE_CXX_STANDARD 17)
@@ -15,7 +15,6 @@ set(CMAKE_CXX_FLAGS "-g -Wall")
 
 option(COVERALLS "Generate coveralls data" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-message(STATUS "Module Path: ${CMAKE_MODULE_PATH}")
 
 if (COVERALLS)
     include(Coveralls)

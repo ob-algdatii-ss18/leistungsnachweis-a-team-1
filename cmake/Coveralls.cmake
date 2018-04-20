@@ -31,7 +31,6 @@ set(_CMAKE_SCRIPT_PATH ${CMAKE_CURRENT_LIST_DIR}) # must be outside coveralls_se
 
 function(coveralls_setup _COVERAGE_SRCS _COVERALLS_UPLOAD)
 
-	message(STATUS "Script Path: ${_CMAKE_SCRIPT_PATH}")
 	if (ARGC GREATER 2)
 		set(_CMAKE_SCRIPT_PATH ${ARGN})
 		message(STATUS "Coveralls: Using alternate CMake script dir: ${_CMAKE_SCRIPT_PATH}")
