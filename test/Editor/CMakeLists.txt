@@ -8,8 +8,7 @@ include_directories(${PROJECT_EDITOR_SRC_DIR})
 add_executable(testEditorRun ${SRCS})
 
 find_package(Threads)
-target_link_libraries(testEditorRun mainwindow gtest gmock ${CMAKE_THREAD_LIBS_INIT})
-add_test(NAME TestEditor COMMAND testEditorRun)
+target_link_libraries(testEditorRun PUBLIC mainwindow gtest gmock ${CMAKE_THREAD_LIBS_INIT})
 
 if (MSVC)
     target_compile_options(testEditorRun PRIVATE /std:c++17 /W4 /WX)
