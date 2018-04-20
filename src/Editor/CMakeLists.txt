@@ -11,17 +11,15 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
 
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
 
 set(Editor_src ${PROJECT_SOURCE_DIR}/mainwindow.cpp)
 set(Editor_hdr ${PROJECT_SOURCE_DIR}/mainwindow.h)
 set(Editor_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
 set(EditorBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 
-#qt5_wrap_cpp(Editor_hdr_moc ${Editor_hdr})
-#qt_wrap_ui(Editor_ui_moc ${Editor_ui})
 include_directories(../Engine/engine)
 
 add_library(mainwindow mainwindow.cpp)

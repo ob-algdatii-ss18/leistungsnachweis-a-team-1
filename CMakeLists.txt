@@ -15,8 +15,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
 # Set the QT Library
-set(CMAKE_PREFIX_PATH "F:\\LIBRARIES\\Qt\\5.10.1\\mingw53_32;F:\\LIBRARIES\\googletest")
-
+# set(CMAKE_PREFIX_PATH "F:\\LIBRARIES\\Qt\\5.10.1\\mingw53_32;F:\\LIBRARIES\\googletest")
 add_subdirectory(src/Editor)
 add_subdirectory(src/Engine)
 
