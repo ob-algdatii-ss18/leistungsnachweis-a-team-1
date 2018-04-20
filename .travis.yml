@@ -39,5 +39,8 @@ script:
     # Execute the build
     - cmake --build .
 
+    # run tests
+    - ctest
+
     # Upload to coverall
     - make coveralls

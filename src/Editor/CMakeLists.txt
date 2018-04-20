@@ -29,7 +29,7 @@ add_executable(editor main.cpp mainwindow)
 target_link_libraries(editor mainwindow engine)
 
 if (COVERALLS)
-    set(COVERAGE_SRCS mainwindow.cpp main.cpp)
+    set(COVERAGE_SRCS ${PROJECT_SOURCE_DIR}/mainwindow.cpp ${PROJECT_SOURCE_DIR}/main.cpp)
     coveralls_setup(
         "${COVERAGE_SRCS}"
         ON
