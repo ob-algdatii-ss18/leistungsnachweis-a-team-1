@@ -49,5 +49,8 @@ script:
     # run tests
     - ./test/Editor/testEditorRun
 
+    - ./test/Engine/testEngineRun
+
 after_success:
     - coveralls --root ./test/Editor/ -E".*CMakeFiles.*" -E".*google.*" -E".*autogen.*" --gcov-options '\-lp'
+    - coveralls --root ./test/Engine/ -E".*CMakeFiles.*" -E".*google.*" -E".*autogen.*" --gcov-options '\-lp'
