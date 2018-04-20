@@ -52,4 +52,4 @@ script:
     - ./test/Engine/testEngineRun
 
 after_success:
-    - coveralls --root ../ -E".*CMakeFiles.*" -E"build" -E"cmake" -E"test"
+    - coveralls --root ../ -E".*CMakeFiles.*" -E"build/" -E"cmake" -E"test/"
