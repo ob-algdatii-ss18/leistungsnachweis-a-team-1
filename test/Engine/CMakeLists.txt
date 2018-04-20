@@ -5,7 +5,7 @@ enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
 
-include_directories(${PROJECT_SOURCE_DIR}/Engine)
+include_directories(${PROJECT_EDITOR_SRC_DIR})
 
 add_executable(testEngineRun ${SRCS})
 
