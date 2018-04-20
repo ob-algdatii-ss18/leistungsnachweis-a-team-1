@@ -3,12 +3,17 @@ os: linux
 compiler: clang
 
 sudo: required
-dist: trusty     
+dist: trusty   
+
+env:
+    - export COVERALLS_SERVICE_NAME=travis-ci
+    - export COVERALLS_REPO_TOKEN=KQ14UwDkm2k8cbB4YZS61pL1GECbMPG2V
 
 before_install:
     # Add and update Qt 5.10.1 Repository
     - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
     - sudo apt-get update -qq
+
     # Coveralls install
     - pip install --user cpp-coveralls
 
@@ -27,17 +32,12 @@ script:
     - source /opt/qt510/bin/qt510-env.sh
 
     # Execute cmake configuration
-    - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+    - cmake -Bbuild -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
 
-    # Create new build directory
-    - mkdir build
     - cd build
 
     # Execute the build
-    - cmake --build ../
+    - cmake --build .
 
-    # Test the project
-    - ctest
-
-after_success:
-    - coveralls --exclude test --exclude doc -gcov --gcov-options '\-lp'
+    # Upload to coverall
+    - make coveralls
