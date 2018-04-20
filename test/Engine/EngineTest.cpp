@@ -1,7 +1,8 @@
 #include "EngineTest.h"
 #include <Graph.h>
 
+extern int add(int a, int b);
+
 TEST_F(EngineTest, ByDefaultTrue) {
-    Graph g;
-    ASSERT_TRUE(true);
+    ASSERT_THAT(add(1, 2), 3);
 }
