@@ -49,4 +49,4 @@ script:
     # run tests
     - ./test/Editor/testEditorRun
 
-    - coveralls --root . -E".*CMakeFiles.*" -E"*google*" -E"*autogen*"
+    - coveralls --root . -E".*CMakeFiles.*" -E".*google.*" -E".*autogen.*"
