@@ -27,11 +27,3 @@ target_link_libraries(mainwindow Qt5::Widgets)
 
 add_executable(editor main.cpp mainwindow)
 target_link_libraries(editor mainwindow engine)
-
-if (COVERALLS)
-    set(COVERAGE_SRCS ${PROJECT_SOURCE_DIR}/mainwindow.cpp ${PROJECT_SOURCE_DIR}/main.cpp)
-    coveralls_setup(
-        "${COVERAGE_SRCS}"
-        ON
-    )
-endif()

@@ -36,6 +36,14 @@ include(CTest)
 # download and build googletest
 include(cmake/googletest-download.cmake)
 
+if (COVERALLS)
+    set(COVERAGE_SRCS ${PROJECT_ENGINE_SRC_DIR}/Graph.cpp ${PROJECT_ENGINE_SRC_DIR}/foo1.cpp ${PROJECT_EDITOR_SRC_DIR}/mainwindow.cpp
+    ${PROJECT_EDITOR_SRC_DIR}/main.cpp)
+    coveralls_setup(
+        "${COVERAGE_SRCS}"
+        ON
+    )
+endif()
 
 add_subdirectory(test/Editor)
 add_subdirectory(test/Engine)
