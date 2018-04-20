@@ -50,4 +50,4 @@ script:
     - ./test/Editor/testEditorRun
 
 after_success:
-    - coveralls --root . -E".*CMakeFiles.*" -E".*google.*" -E".*autogen.*"
+    - coveralls --root ./test/Editor/ -E".*CMakeFiles.*" -E".*google.*" -E".*autogen.*" --gcov-options '\-lp'
