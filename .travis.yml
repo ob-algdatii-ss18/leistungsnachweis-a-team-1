@@ -32,7 +32,7 @@ script:
     - source /opt/qt510/bin/qt510-env.sh
 
     # Execute cmake configuration
-    - cmake -Bbuild -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+    - cmake -H. -Bbuild -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
 
     - cd build
 
