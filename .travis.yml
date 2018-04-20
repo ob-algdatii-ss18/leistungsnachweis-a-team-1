@@ -1,9 +1,17 @@
 language: cpp
 os: linux
-compiler: clang
 
 sudo: required
 dist: trusty   
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+        packages:
+            - g++-6
+            - clang-5.0
 
 env:
     - export COVERALLS_SERVICE_NAME=travis-ci
@@ -31,7 +39,7 @@ script:
     - source /opt/qt510/bin/qt510-env.sh
 
     # Execute cmake configuration
-    - cmake -H. -Bbuild -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
+    - CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6 cmake -H. -Bbuild -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/qt510/lib/cmake
 
     - cd build
 
@@ -41,4 +49,4 @@ script:
     # run tests
     - ctest
 
-    - coveralls --root . E ".*CMakeFiles.*"
+    - coveralls --root . -E".*CMakeFiles.*"
