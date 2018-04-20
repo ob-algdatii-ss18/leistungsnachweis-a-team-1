@@ -14,9 +14,6 @@ before_install:
     - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
     - sudo apt-get update -qq
 
-    # Coveralls install
-    - pip install --user cpp-coveralls
-
 install:
     # Install Qt 5.10.1
     - sudo apt-get --yes install qt510base
