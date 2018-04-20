@@ -7,5 +7,15 @@ include_directories(${PROJECT_ENGINE_SRC_DIR})
 
 add_executable(testEngineRun ${SRCS})
 
-target_link_libraries(testEngineRun engine gtest gmock)
-add_test(NAME TestEngine COMMAND testEngineRun)
+find_package(Threads)
+target_link_libraries(testEngineRun PUBLIC engine gtest gmock ${CMAKE_THREAD_LIBS_INIT})
+
+if (MSVC)
+    target_compile_options(testEngineRun PRIVATE /std:c++17 /W4 /WX)
+else()
+    target_compile_options(testEngineRun PRIVATE -std=c++17 -g -Wall -Werror -Wextra -Wpedantic -Wconversion -Wswitch-default -Wswitch-enum -Wunreachable-code -Wwrite-strings -Wcast-align -Wshadow -Wundef)
+    if (COVERALLS)
+        target_compile_options(testEngineRun PRIVATE --coverage)
+        target_link_libraries(testEngineRun PRIVATE --coverage)
+    endif()
+endif()
