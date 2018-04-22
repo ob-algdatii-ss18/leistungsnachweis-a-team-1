@@ -6,10 +6,10 @@
 #include <iostream>
 
 TEST_F(EngineTest, TimerStart) {
-    stopwatch<std::ratio<1,100>> watch;
+    stopwatch watch;
     watch.start();
     std::this_thread::sleep_for(std::chrono::seconds(3));
     watch.stop();
-    EXPECT_DOUBLE_EQ(std::round(watch.elapsedTime().count()/100), 3);
+    EXPECT_DOUBLE_EQ(std::round(watch.elapsedTime<double, centi>()/100.0), 3);
 }
 
