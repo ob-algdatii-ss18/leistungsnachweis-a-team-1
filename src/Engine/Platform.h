@@ -5,6 +5,11 @@ struct windows {};
 struct macosx {};
 struct linux {};
 
+#if !defined(WIN32)
+    void QueryPerformanceCounter(void*);
+    void QueryPerformanceFrequency(void*);
+#endif
+
 #if defined(WIN32)
 #include <windows.h>
 using platform_type = windows;
