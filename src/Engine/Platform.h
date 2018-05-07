@@ -9,7 +9,7 @@ struct linux {};
     void QueryPerformanceCounter(void*);
     void QueryPerformanceFrequency(void*)
     union LARGE_INTEGER;
-    typedef LARGE_INTEGER PLARGE_INTEGER;
+    typedef LARGE_INTEGER* PLARGE_INTEGER;
 #endif
 
 #if defined(WIN32)
