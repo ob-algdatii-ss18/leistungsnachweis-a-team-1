@@ -173,7 +173,7 @@ public:
 
     void remove_node(node_descriptor v) {
         m_nodes.erase(m_nodes.begin() + v);
-        node_descriptor V = num_vertices();
+        node_descriptor V = num_nodes();
 
         if (v != V) {
             for (node_descriptor i = 0; i < V; ++i)
@@ -202,8 +202,8 @@ public:
         return add_edge(v, u, _EdgeProperty(std::forward<TArgs>(args)...));
     }
 
-    void remove_edge(node_descriptor u, node_descriptor v) {
-
+    void remove_edge(edge_descriptor e) {
+        out_edge_list(e.source()).erase(e.target());
     }
 
     template <typename Predicate>
@@ -213,6 +213,7 @@ public:
 
     template <typename Predicate>
     void remove_edge_if(node_descriptor u, node_descriptor v, Predicate pred) {
+
 
     }
 
@@ -279,14 +280,19 @@ public:
     /**
      * @return number of edges in Graph
      */
-    edges_size_t num_edges() const {
-        return 0;
+    edges_size_t num_edges() {
+        edges_size_t number_edges = 0;
+        node_iterator i, iend;
+        for (std::tie(i, iend) = nodes(); i != iend; ++i)
+            number_edges += out_degree(*i);
+
+        return number_edges;
     }
 
     /**
-     * @return number of vertices in Graph
+     * @return number of nodes in Graph
      */
-    vertices_size_t num_vertices() const {
+    vertices_size_t num_nodes() const {
         return m_nodes.size();
     }
 
@@ -295,6 +301,13 @@ public:
      */
     node_property get(node_descriptor u) const {
         return m_nodes[u].m_property;
+    }
+
+    edge_property get(edge_descriptor u) const {
+        edge_list el = out_edge_list(u.source());
+        typename edge_list::iterator i = el.begin();
+
+
     }
 
     /**
