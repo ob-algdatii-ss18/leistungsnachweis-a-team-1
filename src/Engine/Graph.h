@@ -145,7 +145,7 @@ public:
     using outgoing_edge_list = std::vector<edge_list>;
 
     using edges_size_t = unsigned int;
-    using vertices_size_t = unsigned int;
+    using node_size_t = node_list::size_type;
     using degree_size_t = unsigned int;
 
     using OutEdgeIter = typename edge_list::iterator;
@@ -165,7 +165,7 @@ public:
      Graph_base() = default;
      template <typename EdgeIterator>
      Graph_base(EdgeIterator first, EdgeIterator last,
-                vertices_size_t size) : m_nodes(size) {
+                node_size_t size) : m_nodes(size) {
          while (first != last) {
              add_edge((*first).first, (*first).second);
              ++first;
@@ -187,7 +187,7 @@ public:
      node_descriptor add_node(const node_property& p)
     {
         m_nodes.push_back(stored_node(p));
-        return m_nodes.size() - 1;
+        return static_cast<node_descriptor>(m_nodes.size() - 1);
     }
 
     void remove_node(node_descriptor v) {
@@ -301,8 +301,8 @@ public:
     /**
      * @return number of nodes in Graph
      */
-    vertices_size_t num_nodes() const {
-        return m_nodes.size();
+    node_size_t num_nodes() const {
+        return static_cast<node_size_t>(m_nodes.size());
     }
 
     /**

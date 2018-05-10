@@ -13,7 +13,7 @@ target_link_libraries(testEngineRun PUBLIC engine gtest gmock ${CMAKE_THREAD_LIB
 if (MSVC)
     target_compile_options(testEngineRun PRIVATE /std:c++17 /W4 /WX)
 else()
-    target_compile_options(testEngineRun PRIVATE -std=c++17 -g -Wall -Werror -Wextra -Wpedantic -Wconversion -Wswitch-default -Wswitch-enum -Wunreachable-code -Wwrite-strings -Wcast-align -Wshadow -Wundef)
+    target_compile_options(testEngineRun PRIVATE -std=c++17 -g -Wall -Werror -Wextra -Wpedantic -Wswitch-default -Wswitch-enum -Wunreachable-code -Wwrite-strings -Wcast-align -Wshadow -Wundef)
     if (COVERALLS)
         target_compile_options(testEngineRun PRIVATE --coverage)
         target_link_libraries(testEngineRun PRIVATE --coverage)
