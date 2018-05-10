@@ -7,7 +7,7 @@ struct linux {};
 
 #if !defined(WIN32)
     void QueryPerformanceCounter(void*);
-    void QueryPerformanceFrequency(void*)
+    void QueryPerformanceFrequency(void*);
     typedef void* PLARGE_INTEGER;
 #endif
 
