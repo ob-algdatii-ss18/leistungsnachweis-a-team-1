@@ -145,7 +145,7 @@ public:
     using outgoing_edge_list = std::vector<edge_list>;
 
     using edges_size_t = unsigned int;
-    using node_size_t = node_list::size_type;
+    using node_size_t = typename node_list::size_type;
     using degree_size_t = unsigned int;
 
     using OutEdgeIter = typename edge_list::iterator;
