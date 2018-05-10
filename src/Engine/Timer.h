@@ -21,7 +21,7 @@ using second = resolution<1>;
 template <typename platform> struct timer_traits;
 
 template <>
-struct timer_traits<windows> {
+struct timer_traits<windows_tag> {
     using time_point = int64_t;
     using clock_period = int64_t;
     using duration = int64_t;
@@ -41,7 +41,7 @@ struct timer_traits<windows> {
 
 // TODO: Add MacOS to supported os
 template<>
-struct timer_traits<macosx> {
+struct timer_traits<macosx_tag> {
     using time_point = int64_t;
     using clock_period = intmax_t;
     using duration = int64_t;
@@ -58,7 +58,7 @@ struct timer_traits<macosx> {
 };
 // TODO: Add C++ standard way for high-resolution timer
 template <>
-struct timer_traits<linux> {
+struct timer_traits<linux_tag> {
     using time_point = int64_t;
     using clock_period = intmax_t;
     using duration = int64_t;
