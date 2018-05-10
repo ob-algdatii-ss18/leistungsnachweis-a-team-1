@@ -23,7 +23,7 @@ struct Graph_edge_descriptor {
     { };
 
     Graph_edge_descriptor(const self& rhs) = default;
-    Graph_edge_descriptor(self&& rhs) = default;
+    Graph_edge_descriptor(self&& rhs) noexcept = default;
 
     node_descriptor source() const { return _mytuple.first; }
     node_descriptor target() const { return _mytuple.second; }
@@ -51,7 +51,7 @@ struct Graph_edge_descriptor_with_property : public Graph_edge_descriptor<_NodeD
         return *this;
     }
 
-    self& operator=(self&& rhs) {
+    self& operator=(self&& rhs) noexcept {
         _property = std::move(rhs._property);
         return *this;
     }
@@ -70,10 +70,10 @@ template<typename _Property, typename _NodeDescriptor>
 struct stored_edge_impl {
     using self = stored_edge_impl<_Property, _NodeDescriptor>;
     using node_descriptor = _NodeDescriptor;
-    using Property = _Property;
+    using property_type = _Property;
     stored_edge_impl() { }
-    stored_edge_impl(const node_descriptor to, const Property& p)
-            : _to(to), _property(new Property(p))
+    stored_edge_impl(const node_descriptor to, const property_type& p)
+            : _to(to), _property(new property_type(p))
     { }
 
     stored_edge_impl(const self& rhs)
@@ -81,15 +81,15 @@ struct stored_edge_impl {
                     const_cast<self&>(rhs)._property))
     { }
 
-    stored_edge_impl(stored_edge_impl&& rhs)
+    stored_edge_impl(stored_edge_impl&& rhs) noexcept
             : _to(rhs._to), _property(std::move(rhs._property))
     { }
 
     node_descriptor target() const { return _to; }
-    inline Property& property() const { return *_property; }
+    inline property_type& property() const { return *_property; }
 
     node_descriptor _to;
-    std::unique_ptr<Property> _property;
+    std::unique_ptr<property_type> _property;
 };
 
 struct no_property {
@@ -105,6 +105,25 @@ template <typename Container, typename T>
 typename Container::iterator push_dispatch(Container& c, T v) {
     c.push_back(v);
     return prior(c.end());
+}
+
+/**
+ * Delete the edge containing the specified property in a directed graph.
+ * @tparam edge_descriptor
+ * @tparam EdgeList
+ * @tparam StoredProperty
+ * @param el
+ * @param p
+ */
+template<typename EdgeList, typename StoredProperty>
+inline void
+remove_directed_edge(EdgeList& el, StoredProperty& p)
+{
+    for (typename EdgeList::iterator i = el.begin(); i != el.end(); ++i)
+        if (&(*i).property() == &p) {
+            el.erase(i);
+            return;
+    }
 }
 
 template <typename _NodeProperty, typename _EdgeProperty>
@@ -146,7 +165,7 @@ public:
      Graph_base() = default;
      template <typename EdgeIterator>
      Graph_base(EdgeIterator first, EdgeIterator last,
-                vertices_size_t size) {
+                vertices_size_t size) : m_nodes(size) {
          while (first != last) {
              add_edge((*first).first, (*first).second);
              ++first;
@@ -177,7 +196,7 @@ public:
 
         if (v != V) {
             for (node_descriptor i = 0; i < V; ++i)
-                reindex_edge_list(out_edge_list(v), v);
+                reindex_edge_list(out_edge_list(i), v);
         }
     }
 
@@ -203,18 +222,8 @@ public:
     }
 
     void remove_edge(edge_descriptor e) {
-        out_edge_list(e.source()).erase(e.target());
-    }
-
-    template <typename Predicate>
-    void remove_out_edge_if(node_descriptor u, Predicate pred) {
-
-    }
-
-    template <typename Predicate>
-    void remove_edge_if(node_descriptor u, node_descriptor v, Predicate pred) {
-
-
+        edge_list& el = out_edge_list(e.source());
+        remove_directed_edge(el, *e._property);
     }
 
     inline degree_size_t out_degree(node_descriptor u) const {
@@ -297,17 +306,27 @@ public:
     }
 
     /**
-     * @return property associated with node
+     * @return property associated with node.
      */
     node_property get(node_descriptor u) const {
         return m_nodes[u].m_property;
     }
 
+    /**
+     * returns the property associated with an edge.
+     * TODO: not working with parallel edges.
+     * @param u - the edge descriptor
+     * @return the edge-property if found.
+     */
     edge_property get(edge_descriptor u) const {
-        edge_list el = out_edge_list(u.source());
-        typename edge_list::iterator i = el.begin();
+        auto& el= out_edge_list(u.source());
+        for (auto i = el.begin(); i != el.end(); ++i) {
+            if ((*i).target() == u.target()) {
+                return *(*i)._property;
+            }
+        }
 
-
+        return edge_property();
     }
 
     /**
@@ -325,7 +344,13 @@ public:
      * @param p
      */
     void put(edge_descriptor e, edge_property p) {
-
+        auto& el= out_edge_list(e.source());
+        for (auto i = el.begin(); i != el.end(); ++i) {
+            if (&(*i).property() == e._property) {
+                (*i)._property.reset(new edge_property(p));
+                return;
+            }
+        }
     }
 
 private:

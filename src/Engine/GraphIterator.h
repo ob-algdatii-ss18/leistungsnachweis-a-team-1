@@ -21,6 +21,13 @@ struct iterator_pointer
     using type = typename std::iterator_traits<Iterator>::pointer ;
 };
 
+/**
+ * The iterator iterates through every outgoing edge from one node in a graph.
+ * @tparam BaseIter - The type of the iterator containing the edges.
+ * @tparam NodeDescriptor
+ * @tparam EdgeDescriptor
+ * @tparam Difference - The type to calculate the difference between two iterators
+ */
 template <typename BaseIter, typename NodeDescriptor, typename EdgeDescriptor, typename  Difference>
 struct out_edge_iter {
     using self = out_edge_iter<BaseIter, NodeDescriptor, EdgeDescriptor, Difference>;
@@ -65,6 +72,12 @@ struct out_edge_iter {
     NodeDescriptor m_src;
 };
 
+/**
+ * This iterator iterates through every edge from every node in a graph.
+ * @tparam VertexIterator
+ * @tparam OutEdgeIterator
+ * @tparam Graph
+ */
 template<typename VertexIterator, typename OutEdgeIterator, typename Graph>
 class Graph_edge_iterator {
     using self = Graph_edge_iterator<VertexIterator, OutEdgeIterator, Graph>;
