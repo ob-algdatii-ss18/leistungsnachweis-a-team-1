@@ -40,7 +40,22 @@ struct timer_traits<windows> {
 };
 
 // TODO: Add MacOS to supported os
+template<>
+struct timer_traits<macosx> {
+    using time_point = int64_t;
+    using clock_period = intmax_t;
+    using duration = int64_t;
 
+    static time_point now() {
+        timeval start;
+        gettimeofday(&start, NULL);
+        return start.tv_sec + start.tv_usec;
+    }
+
+    static clock_period period() {
+        return 1;
+    }
+};
 // TODO: Add C++ standard way for high-resolution timer
 template <>
 struct timer_traits<linux> {

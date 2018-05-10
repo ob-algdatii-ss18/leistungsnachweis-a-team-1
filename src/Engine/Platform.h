@@ -8,8 +8,15 @@ struct linux {};
 #if !defined(WIN32)
     void QueryPerformanceCounter(void*);
     void QueryPerformanceFrequency(void*)
-    union LARGE_INTEGER;
-    typedef LARGE_INTEGER* PLARGE_INTEGER;
+    typedef void* PLARGE_INTEGER;
+#endif
+
+#if !defined(__linux__)
+    void gettimeofday(void *, void*);
+#endif
+
+#if !defined(__APPLE__)
+
 #endif
 
 #if defined(WIN32)
