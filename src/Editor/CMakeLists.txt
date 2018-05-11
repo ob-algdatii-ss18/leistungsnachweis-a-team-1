@@ -20,7 +20,7 @@ set(Editor_hdr ${PROJECT_SOURCE_DIR}/mainwindow.h)
 set(Editor_ui ${PROJECT_SOURCE_DIR}/mainwindow.ui)
 set(EditorBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 
-include_directories(../Engine/engine)
+include_directories(../Engine/)
 
 add_library(mainwindow mainwindow.cpp)
 target_link_libraries(mainwindow Qt5::Widgets)
