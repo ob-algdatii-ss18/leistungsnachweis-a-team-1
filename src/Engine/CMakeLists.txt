@@ -5,5 +5,5 @@ project(Engine)
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 1)
 
-add_library(engine Graph.cpp)
+add_library(engine Graph.cpp Maze.cpp)
 
