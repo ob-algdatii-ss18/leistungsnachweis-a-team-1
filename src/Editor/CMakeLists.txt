@@ -25,5 +25,5 @@ include_directories(../Engine/)
 add_library(mainwindow mainwindow.cpp)
 target_link_libraries(mainwindow Qt5::Widgets)
 
-add_executable(editor main.cpp mainwindow)
+add_executable(editor main.cpp mainwindow MazeAsciiVisualizer.cpp)
 target_link_libraries(editor mainwindow engine)

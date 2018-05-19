@@ -8,25 +8,25 @@
 
 
 Maze::Maze(std::string serialization) {
-    int width = serialization.find(NEW_LINE);
-    int height = (serialization.length() + 1) / (width + 1);
+    width = serialization.find(NEW_LINE);
+    height = (serialization.length() + 1) / (width + 1);
 
-    graph = new Graph_base<Field, no_property>();
-    auto fieldMatrix = new Graph_base<Field, no_property>::node_descriptor *[height];
-    fieldMatrix[0] = new Graph_base<Field, no_property>::node_descriptor[width];
+    graph = new Graph_base<Field*, no_property>();
+    auto fieldMatrix = new Graph_base<Field*, no_property>::node_descriptor *[height];
+    fieldMatrix[0] = new Graph_base<Field*, no_property>::node_descriptor[width];
     int y = 0;
     int x = 0;
-    const Graph_base<Field, no_property>::node_descriptor wall = UINT_MAX;
+    const Graph_base<Field*, no_property>::node_descriptor wall = UINT_MAX;
 
     for (std::string::iterator it = serialization.begin(); it != serialization.end(); ++it) {
-        auto field = graph->add_node(Field(x, y));
+        auto field = graph->add_node(new Field(x, y));
         switch (*it) {
             case START:
-                start = graph->get(field);
+                start = field;
                 fieldMatrix[y][x] = field;
                 break;
             case END:
-                end = graph->get(field);
+                end = field;
                 fieldMatrix[y][x] = field;
                 break;
             case FIELD:
@@ -69,3 +69,27 @@ Maze::Maze(std::string serialization) {
         }
     }
 }
+
+Graph_base<Maze::Field*, no_property>::node_descriptor Maze::getStart() {
+    return start;
+};
+
+Graph_base<Maze::Field*, no_property>::node_descriptor Maze::getEnd() {
+    return end;
+};
+
+Graph_base<Maze::Field*, no_property> *Maze::getGraph() {
+    return graph;
+}
+
+int Maze::getHeight() {
+    return height;
+}
+
+int Maze::getWidth() {
+    return width;
+};
+
+
+
+

@@ -10,19 +10,45 @@
 #include "Graph.h"
 
 class Maze {
+public:
     struct Field {
         int _x;
         int _y;
         bool _visited = false;
+        bool _inShortestPath = false;
 
         Field(int x, int y) : _x(x), _y(y) {};
 
         Field() : _x(0), _y(0) {};
+
+        void visit(){
+            _visited = true;
+        }
+
+        void setInShortestPath(){
+            _inShortestPath = true;
+        }
     };
 
-    Field start;
-    Field end;
-    Graph_base<Field, no_property> *graph;
+    Graph_base<Field*, no_property>::node_descriptor getStart();
+
+    Graph_base<Field*, no_property>::node_descriptor getEnd();
+
+    Graph_base<Field*, no_property> *getGraph();
+
+    int getWidth();
+
+    int getHeight();
+
+    Maze(std::string serialization);
+
+
+private:
+    Graph_base<Field*, no_property>::node_descriptor start;
+    Graph_base<Field*, no_property>::node_descriptor end;
+    Graph_base<Field*, no_property> *graph;
+    int height;
+    int width;
 
     //serialization protocol
     /* Example:
@@ -38,10 +64,6 @@ class Maze {
         END = 'E',
         NEW_LINE = '\n'
     };
-
-public:
-
-    Maze(std::string serialization);
 };
 
 
