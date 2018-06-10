@@ -1,7 +1,6 @@
 #include "GraphTest.h"
 
 #include <Graph.h>
-#include <Properties.h>
 
 TEST_F(GraphTest, IntegerRangeTest) {
     auto it = Integer_range<int>(0, 100);
