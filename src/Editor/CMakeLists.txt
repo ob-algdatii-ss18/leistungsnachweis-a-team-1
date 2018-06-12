@@ -22,11 +22,9 @@ set(EditorBin_src ${PROJECT_SOURCE_DIR}/main.cpp)
 
 include_directories(../Engine/)
 
-add_library(mainwindow mainwindow.cpp)
+add_library(mainwindow mainwindow.cpp GraphWidget.cpp MathUtils.cpp)
 target_link_libraries(mainwindow Qt5::Widgets)
 
-add_library(visualizer  MazeAsciiVisualizer.cpp)
-target_link_libraries(visualizer Qt5::Widgets)
-
+set(CMAKE_AUTOMOC OFF)
 add_executable(editor main.cpp mainwindow)
-target_link_libraries(editor mainwindow engine visualizer)
+target_link_libraries(editor mainwindow engine)
