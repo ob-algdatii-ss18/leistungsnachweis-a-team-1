@@ -3,52 +3,73 @@
 #include "GraphWidget.h"
 #include "config.h"
 
-MainWindow::MainWindow() : m_pGraphWidget(new GraphWidget),
+MainWindow::MainWindow() : m_pGraphWidget(new GraphWidget(Config::NumCellsX, Config::NumCellsY)),
 m_breadthFirstSearchBtn(nullptr), m_dijkstraSearchBtn(nullptr), m_aStarSearchBtn(nullptr) {
-    setWindowTitle("A* Editor");
+    setWindowTitle("Editor");
     setupUi();
     this->resize(600, 480);
     setFixedSize(870, 520);
+    setWindowIcon(QIcon(":/astar.png"));
 
     /*
      * Load Stylesheet.
      */
-    QFile stylesheet("F:\\SOURCE\\Semester8\\Algodatii\\leistungsnachweis-a-team-1\\src\\Editor\\styles.qss");
+    QFile stylesheet(":/styles.qss");
     if (stylesheet.open(QFile::ReadOnly))
         setStyleSheet(stylesheet.readAll());
 
     createActions();
     createMenus();
 
-    connect(m_dijkstraSearchBtn, SIGNAL(clicked()), this, SLOT(dijkstraSearch()));
-    connect(m_breadthFirstSearchBtn, SIGNAL(clicked()), this, SLOT(BFS()));
-    connect(m_aStarSearchBtn, SIGNAL(clicked()), this, SLOT(aStarSearch()));
+    auto aName = m_dijkstraSearchBtn->objectName();
+    connect(m_dijkstraSearchBtn, &QPushButton::clicked, this, [aName, this]() {
+        m_pGraphWidget->createPathDijkstra();
+    });
+    aName = m_breadthFirstSearchBtn->objectName();
+    connect(m_breadthFirstSearchBtn, &QPushButton::clicked, this, [aName, this]() {
+        m_pGraphWidget->createPathBFS();
+    });
+    aName = m_aStarSearchBtn->objectName();
+    connect(m_aStarSearchBtn, &QPushButton::clicked, this, [aName, this]() {
+        m_pGraphWidget->createPathAStar();
+    });
     connect(m_pGraphWidget, &GraphWidget::changedGraph, this, &MainWindow::updateGraphStats);
 
-    auto aName = m_planarBtn->objectName();
+    aName = m_planarBtn->objectName();
     connect(m_planarBtn, &QPushButton::clicked, this, [aName, this]() {
+        setPressedButton(m_planarBtn);
         m_pGraphWidget->setCurTerrain(field_type::planar);
     });
     aName = m_wallBtn->objectName();
     connect(m_wallBtn, &QPushButton::clicked, this, [aName, this]() {
+        setPressedButton(m_wallBtn);
         m_pGraphWidget->setCurTerrain(field_type::wall);
     });
     aName = m_waterBtn->objectName();
     connect(m_waterBtn, &QPushButton::clicked, this, [aName, this]() {
+        setPressedButton(m_waterBtn);
         m_pGraphWidget->setCurTerrain(field_type::water);
     });
     aName = m_hillBtn->objectName();
     connect(m_hillBtn, &QPushButton::clicked, this, [aName, this]() {
+        setPressedButton(m_hillBtn);
         m_pGraphWidget->setCurTerrain(field_type::hill);
     });
     aName = m_targetBtn->objectName();
     connect(m_targetBtn, &QPushButton::clicked, this, [aName, this]() {
-        m_pGraphWidget->setTargetField();
+        setPressedButton(m_targetBtn);
+        m_pGraphWidget->setCurTerrain(field_type::target);
     });
-
     aName = m_srcBtn->objectName();
     connect(m_srcBtn, &QPushButton::clicked, this, [aName, this]() {
-        m_pGraphWidget->setSourceField();
+        setPressedButton(m_srcBtn);
+        m_pGraphWidget->setCurTerrain(field_type::source);
+    });
+    aName = m_applyBtn->objectName();
+    connect(m_applyBtn, &QPushButton::clicked, this, [aName, this]() {
+        m_pGraphWidget->createGraph(
+                m_xDimEd->text().toInt(),
+                m_yDimEd->text().toInt());
     });
 }
 
@@ -62,8 +83,19 @@ void MainWindow::setupUi() {
     m_hillBtn = new QPushButton("Gebirge");
     m_srcBtn = new QPushButton("Start");
     m_targetBtn = new QPushButton("End");
+    m_currPressedBtn = m_planarBtn;
+    m_planarBtn->setCheckable(true);
     m_numEdges = new QLabel(QString::number(m_pGraphWidget->numEdges()));
     m_numNodes = new QLabel(QString::number(m_pGraphWidget->numNodes()));
+    m_applyBtn = new QPushButton("Anwenden");
+    QRegExp re("[0-9]+");
+    QRegExpValidator *validator = new QRegExpValidator(re, this);
+    m_xDimEd = new QLineEdit;
+    m_yDimEd = new QLineEdit;
+    m_xDimEd->setValidator(validator);
+    m_yDimEd->setValidator(validator);
+    m_xDimEd->setText(QString::number(Config::NumCellsX));
+    m_yDimEd->setText(QString::number(Config::NumCellsY));
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     QVBoxLayout *mainVBox = new QVBoxLayout;
@@ -73,6 +105,8 @@ void MainWindow::setupUi() {
     QHBoxLayout *lay2 = new QHBoxLayout;
     QHBoxLayout *lay3 = new QHBoxLayout;
     QHBoxLayout *lay4 = new QHBoxLayout;
+    QHBoxLayout *lay5 = new QHBoxLayout;
+    QHBoxLayout *lay6 = new QHBoxLayout;
     vBoxLayout->addWidget(new QLabel("Map-Dimension:"));
     vBoxLayout->addLayout(mapLayout);
     vBoxLayout->addWidget(new QLabel("Such-Algorithmen"));
@@ -90,20 +124,24 @@ void MainWindow::setupUi() {
     lay3->addWidget(m_numNodes);
     lay4->addWidget(new QLabel("Kanten:"));
     lay4->addWidget(m_numEdges);
+    lay5->addWidget(new QLabel("Total Cost:"));
+    lay6->addWidget(new QLabel("Total Time:"));
     vBoxLayout->addLayout(lay);
     vBoxLayout->addLayout(lay1);
     vBoxLayout->addLayout(lay2);
     vBoxLayout->addWidget(new QLabel("Graph Stats:"));
     vBoxLayout->addLayout(lay3);
     vBoxLayout->addLayout(lay4);
+    vBoxLayout->addLayout(lay5);
+    vBoxLayout->addLayout(lay6);
     vBoxLayout->setAlignment(Qt::AlignTop);
     vBoxLayout->setSpacing(5);
 
     mapLayout->addWidget(new QLabel("x:"));
-    mapLayout->addWidget(new QLineEdit);
+    mapLayout->addWidget(m_xDimEd);
     mapLayout->addWidget(new QLabel("y:"));
-    mapLayout->addWidget(new QLineEdit);
-    mapLayout->addWidget(new QPushButton("Anwenden"));
+    mapLayout->addWidget(m_yDimEd);
+    mapLayout->addWidget(m_applyBtn);
 
     mainVBox->addWidget(m_pGraphWidget);
     mainVBox->setContentsMargins(0, 0, 0, 0);
@@ -165,20 +203,18 @@ void MainWindow::showGraph() {
     m_pGraphWidget->showGraph(!m_pGraphWidget->isGraphVisible());
 }
 
-void MainWindow::dijkstraSearch() {
-
-}
-
-void MainWindow::BFS() {
-
-}
-
-void MainWindow::aStarSearch() {
-
-}
-
 void MainWindow::updateGraphStats(GraphWidget::Graph_t &graph) {
     m_numEdges->setText(QString::number(graph.num_edges()));
     m_numNodes->setText(QString::number(graph.num_nodes()));
+}
+
+void MainWindow::setPressedButton(QPushButton *button) {
+    if (button == m_currPressedBtn || m_currPressedBtn == nullptr) {
+        return;
+    }
+
+    m_currPressedBtn->setChecked(false);
+    button->setCheckable(true);
+    m_currPressedBtn = button;
 }
 

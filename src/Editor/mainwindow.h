@@ -11,13 +11,11 @@ public:
 	MainWindow();
 	~MainWindow() override;
 
+	void setPressedButton(QPushButton* button);
 	void setupUi();
 
 private slots:
 	void showGraph();
-	void dijkstraSearch();
-	void BFS();
-	void aStarSearch();
 	void updateGraphStats(GraphWidget::Graph_t& graph);
 
 private:
@@ -41,6 +39,10 @@ private:
 	QPushButton *m_wallBtn;
 	QPushButton *m_targetBtn;
 	QPushButton *m_srcBtn;
+	QPushButton *m_applyBtn;
+	QPushButton *m_currPressedBtn;
+	QLineEdit *m_xDimEd;
+	QLineEdit *m_yDimEd;
 	QLabel *m_numNodes;
 	QLabel *m_numEdges;
 };
