@@ -1,0 +1,61 @@
+QWidget
+{
+    background-color: rgb(27, 28, 30);
+    color: rgb(202, 207, 210);
+}
+
+QLineEdit{
+    border-style: none;
+    font-size: 14px;
+    color: rgb(0, 255, 0);
+    selection-background-color:rgb(60, 60, 60);
+}
+
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(53, 57, 60), stop:1 rgb(33, 34, 26));
+    border: 2px solid rgb(9, 10, 12);
+    border-radius: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: rgb(202, 207, 210);
+    height: 25px;
+}
+
+QPushButton:hover {
+    color: rgb(0, 255, 0);
+}
+
+QPushButton:pressed, QPushButton:on {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgb(20, 21, 23), stop:1 rgb(48, 49, 51));
+    padding-top: 2px;
+    color: rgb(0, 255, 0);
+}
+
+QMenuBar {
+    font-size: 14px;
+}
+
+QMenuBar::item:selected {
+    background: black;
+    color: rgb(0, 255, 0);
+}
+
+QMenu {
+    color: black;
+    font-size: 14px;
+}
+
+QMenu::item {
+    color: white;
+}
+
+QMenu::item:selected {
+    background: black;
+    color: rgb(0, 255, 0);
+}
+
+QLabel {
+    font-size: 14px;
+}
