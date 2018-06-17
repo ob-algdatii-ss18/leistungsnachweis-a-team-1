@@ -20,7 +20,9 @@ struct GraphGridHelper {
         float cellHeight = static_cast<float>(height) / static_cast<float>(numCellsY);
         float cellMidX = cellWidth/2;
         float cellMidY = cellHeight/2;
-        terrain.assign(Config::NumCellsX * Config::NumCellsY, field_type::planar);
+        graph.clear();
+        terrain.clear();
+        terrain.assign(numCellsX*numCellsY, field_type::planar);
 
         // add nodes to the graph
         for (int row = 0; row < numCellsY; ++row) {
@@ -55,7 +57,7 @@ struct GraphGridHelper {
         auto edgeit = graph.edges();
 
         for (auto ei = edgeit.first; ei != edgeit.second; ++ei) {
-            qDebug() << (*ei).source() << (*ei).target();
+            qDebug() << (*ei).source() << (*ei).target() << "(" << *(*ei)._property << ')';
         }
 
         qDebug() << "Number of Nodes:" << graph.num_nodes();
@@ -99,7 +101,6 @@ struct GraphGridHelper {
         auto nodeit = graph.nodes();
         auto edgeit = graph.edges();
 
-        painter.setRenderHint(QPainter::Antialiasing, true);
         QColor nodesColor(0, 255, 0);
         QPen pen(Qt::gray, 1);
         painter.setPen(pen);
@@ -118,6 +119,18 @@ struct GraphGridHelper {
             painter.drawEllipse(QPointF(vec.x, vec.y), Config::NodeRadius, Config::NodeRadius);
         }
     }
+
+    template <typename TGraph, typename TCost>
+    static void WeightGraphEdges(TGraph& g, typename TGraph::node_descriptor node, TCost weight) {
+        auto ei = g.edges();
+
+        for (auto i = ei.first; i != ei.second; ++i) {
+            float distance = Distance(g.get((*i).source()),
+                    g.get((*i).target()));
+
+            g.put(*i, distance * weight);
+        }
+    };
 };
 
 #endif //ALOGDAT_LABYRINTH_GRAPHUTILS_H
