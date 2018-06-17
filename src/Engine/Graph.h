@@ -18,7 +18,7 @@ struct Graph_edge_descriptor {
     using node_descriptor = _NodeDescriptor;
     using descriptor = std::pair<node_descriptor, node_descriptor>;
 
-    inline Graph_edge_descriptor(node_descriptor from, node_descriptor to)
+    inline Graph_edge_descriptor(const node_descriptor from, const node_descriptor to)
         : _mytuple(std::pair<node_descriptor, node_descriptor>(from, to))
     { };
 
@@ -38,7 +38,7 @@ struct Graph_edge_descriptor_with_property : public Graph_edge_descriptor<_NodeD
     using property = _EdgeProperty;
     using base = Graph_edge_descriptor<node_descriptor>;
 
-    Graph_edge_descriptor_with_property(node_descriptor from, node_descriptor to, property* p)
+    Graph_edge_descriptor_with_property(const node_descriptor from, const node_descriptor to, property* p)
             : base(from, to), _property(p)
     { }
 
@@ -85,10 +85,11 @@ struct stored_edge_impl {
             : _to(rhs._to), _property(std::move(rhs._property))
     { }
 
-    node_descriptor target() const { return _to; }
-    inline property_type& property() const { return *_property; }
+    inline node_descriptor& target() const { return _to; }
+    inline property_type& property() { return *_property; }
+    inline const property_type& property() const { return *_property; }
 
-    node_descriptor _to;
+    mutable node_descriptor _to;
     std::unique_ptr<property_type> _property;
 };
 
@@ -106,6 +107,16 @@ typename Container::iterator push(Container& c, T v) {
     c.push_back(v);
     return prior(c.end());
 }
+
+template <typename Node>
+struct is_target_predicate {
+    explicit is_target_predicate(const Node& v) : m_target(v) { }
+    template <typename StoredEdge>
+    bool operator()(const StoredEdge& e) const {
+        return e.target() == m_target;
+    }
+    Node m_target;
+};
 
 /**
  * Delete the edge containing the specified property in a directed graph.
@@ -158,6 +169,9 @@ public:
             node_iterator,
             out_edge_iterator,
             self>;
+
+    template<typename T>
+    using NodeMap = std::vector<T>;
 
     /**
      * Konstruktoren, Zuweisung
@@ -223,6 +237,19 @@ public:
     template <typename... TArgs>
     edge_descriptor add_edge(node_descriptor v, node_descriptor u, TArgs&&... args) {
         return add_edge(v, u, _EdgeProperty(std::forward<TArgs>(args)...));
+    }
+
+    /**
+     * Delete all incoming and outgoing edges from a vertex.
+     * @param v the vertex descriptor.
+     */
+    void clear_node(node_descriptor v) {
+        node_iterator ni, niend;
+        for (std::tie(ni, niend) = nodes(); ni != niend; ++ni) {
+            auto& el = out_edge_list(*ni);
+            el.remove_if(is_target_predicate<node_descriptor>(v));
+        }
+        out_edge_list(v).clear();
     }
 
     void remove_edge(edge_descriptor e) {
@@ -306,10 +333,18 @@ public:
         return number_edges;
     }
 
+    void clear() {
+        node_iterator i, iend;
+        for (std::tie(i, iend) = nodes(); i != iend; ++i) {
+            out_edge_list(*i).clear();
+        }
+        m_nodes.clear();
+    }
+
     /**
      * @return number of nodes in Graph
      */
-    node_size_t num_nodes() const {
+    node_size_t num_nodes() {
         return static_cast<node_size_t>(m_nodes.size());
     }
 
@@ -326,7 +361,7 @@ public:
      * @param u - the edge descriptor
      * @return the edge-property if found.
      */
-    edge_property get(edge_descriptor u) const {
+    edge_property get(const edge_descriptor u) const {
         auto& el= out_edge_list(u.source());
         for (auto i = el.begin(); i != el.end(); ++i) {
             if ((*i).target() == u.target()) {
@@ -361,6 +396,11 @@ public:
         }
     }
 
+
+    /**
+     * Is the graph directed or undirected.
+     * @return directed or not.
+     */
     bool is_directed() const { return m_is_digraph; }
 
 private:
@@ -379,7 +419,10 @@ private:
     bool m_is_digraph;
 };
 
-template <typename _TCost>
-using Weighted_graph = Graph_base<no_property, _TCost>;
+template <typename _NodeProperty, typename _EdgeProperty>
+using Graph = Graph_base<_NodeProperty, _EdgeProperty>;
+
+template <typename _EdgeProperty>
+using Weighted_graph = Graph<no_property, double>;
 
 #endif //ALGODAT_GRAPH_H
