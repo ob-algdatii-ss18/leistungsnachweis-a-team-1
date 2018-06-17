@@ -21,6 +21,7 @@ struct iterator_pointer
     using type = typename std::iterator_traits<Iterator>::pointer ;
 };
 
+
 /**
  * The iterator iterates through every outgoing edge from one node in a graph.
  * @tparam BaseIter - The type of the iterator containing the edges.
@@ -145,6 +146,32 @@ protected:
     std::pair<OutEdgeIterator, OutEdgeIterator> m_edges;
 
     Graph *m_g;
+};
+
+template <typename TGraph, typename TNode, typename TOutEdgeIter>
+class adjacency_iter {
+    using self = adjacency_iter;
+
+public:
+    inline adjacency_iter() { }
+    inline adjacency_iter(TOutEdgeIter const& i, const TGraph* g) : m_graph(g), m_iter(i) { }
+
+    inline TNode operator*() const {
+        return (*m_iter).target();
+    }
+
+    inline bool operator!=(const self& x) {
+        return x.m_iter != m_iter;
+    }
+
+    inline self& operator++() {
+        ++m_iter;
+        return *this;
+    }
+
+private:
+    const TGraph *m_graph;
+    TOutEdgeIter m_iter;
 };
 
 #endif

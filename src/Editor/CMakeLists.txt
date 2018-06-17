@@ -13,6 +13,7 @@ find_package(Qt5Gui REQUIRED)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(Editor_src ${PROJECT_SOURCE_DIR}/mainwindow.cpp)
@@ -26,5 +27,5 @@ add_library(mainwindow mainwindow.cpp GraphWidget.cpp MathUtils.cpp)
 target_link_libraries(mainwindow Qt5::Widgets)
 
 set(CMAKE_AUTOMOC OFF)
-add_executable(editor main.cpp mainwindow)
+add_executable(editor main.cpp mainwindow res/resources.qrc)
 target_link_libraries(editor mainwindow engine)

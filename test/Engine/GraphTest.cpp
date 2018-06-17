@@ -193,15 +193,6 @@ TEST_F(GraphTest, ConstructWithEdgeArray) {
     );
 }
 
-TEST_F(GraphTest, GraphPropertiesTest) {
-    using weight_property = property<double>;
-    using graph_t = Graph_base<no_property, weight_property>;
-
-    graph_t g;
-
-    g.add_edge(10, 10, 10);
-}
-
 TEST_F(GraphTest, UndirectedGraphTest) {
     using graph_t = Graph_base<no_property, no_property>;
 
@@ -221,3 +212,4 @@ TEST_F(GraphTest, UndirectedGraphTest) {
             std::cout, "\n"}
     );
 }
+

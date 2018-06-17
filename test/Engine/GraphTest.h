@@ -1,7 +1,3 @@
-//
-// Created by Mashmallow on 07.05.2018.
-//
-
 #ifndef ALOGDAT_LABYRINTH_GRAPHTEST_H
 #define ALOGDAT_LABYRINTH_GRAPHTEST_H
 
