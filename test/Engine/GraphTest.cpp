@@ -35,7 +35,7 @@ TEST_F(GraphTest, AddEdge) {
 }
 
 TEST_F(GraphTest, RemoveNodes) {
-    Weighted_graph<double> graph;
+    Weighted_graph<double> graph(true);
 
     Weighted_graph<double>::node_descriptor v = graph.add_node();
     Weighted_graph<double>::node_descriptor u = graph.add_node();
@@ -49,7 +49,7 @@ TEST_F(GraphTest, RemoveNodes) {
     graph.add_edge(u2, v, 13.0);
     graph.add_edge(u1, u2, 10.0);
 
-    graph.remove_node(v);
+    graph.remove_node(u);
 
     auto ei = graph.edges();
 
@@ -62,7 +62,6 @@ TEST_F(GraphTest, RemoveNodes) {
         std::cout << graph.get(*i) << std::endl;
     }
     ASSERT_THAT(graph.num_edges(), 4);
-
 }
 
 TEST_F(GraphTest, RemoveEdge) {
@@ -190,6 +189,35 @@ TEST_F(GraphTest, ConstructWithEdgeArray) {
     auto ni = g.nodes();
 
     std::copy(ni.first, ni.second, std::ostream_iterator<Weighted_graph<double>::node_descriptor>{
+            std::cout, "\n"}
+    );
+}
+
+TEST_F(GraphTest, GraphPropertiesTest) {
+    using weight_property = property<double>;
+    using graph_t = Graph_base<no_property, weight_property>;
+
+    graph_t g;
+
+    g.add_edge(10, 10, 10);
+}
+
+TEST_F(GraphTest, UndirectedGraphTest) {
+    using graph_t = Graph_base<no_property, no_property>;
+
+    graph_t g(true);
+
+    g.add_edge(10, 9);
+
+    auto ni = g.nodes();
+
+    std::copy(ni.first, ni.second, std::ostream_iterator<graph_t ::node_descriptor>{
+            std::cout, "\n"}
+    );
+
+    auto ei = g.edges();
+
+    std::copy(ei.first, ei.second, std::ostream_iterator<graph_t ::edge_descriptor>{
             std::cout, "\n"}
     );
 }
