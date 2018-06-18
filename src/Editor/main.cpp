@@ -4,7 +4,6 @@
 #include "mainwindow.h"
 
 #include <Graph.h>
-#include <iostream>
 
 int main(int argc, char* argv[]) {
     QScopedPointer<QApplication> app(new QApplication(argc, argv));

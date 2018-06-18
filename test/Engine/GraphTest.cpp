@@ -61,7 +61,7 @@ TEST_F(GraphTest, RemoveNodes) {
     for (;i!=ei.second; ++i) {
         std::cout << graph.get(*i) << std::endl;
     }
-    ASSERT_THAT(graph.num_edges(), 4);
+    ASSERT_THAT(graph.num_edges(), 8);
 }
 
 TEST_F(GraphTest, RemoveEdge) {
