@@ -2,7 +2,7 @@
 
 #include <LowPriorityQueue.h>
 
-/*TEST_F(PriorityQueueTest, insert) {
+TEST_F(PriorityQueueTest, insert) {
     std::vector<int> data;
     data.push_back(6);
     data.push_back(4);
@@ -21,4 +21,4 @@
     {
         std::cout << q.pop() << std::endl;
     }
-}*/
+}

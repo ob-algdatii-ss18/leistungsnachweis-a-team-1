@@ -5,7 +5,7 @@
 #include "GraphAlgorithmTest.h"
 
 const char *names = "rstuvwxy";
-/*
+
 template <typename Graph>
 struct MyBFSVisitor {
     using Node = typename Graph::node_descriptor;
@@ -25,7 +25,7 @@ struct MyBFSVisitor {
         g.put(e.target(), distance + 1);
     }
 };
-
+/*
 TEST_F(GraphAlgorithmTest, BreadthFirstSearch) {
     using graph_t = Graph_base<uint32_t, no_property>;
     enum { r, s, t, u, v, w, x, y, N};
