@@ -5,7 +5,7 @@
 #include "GraphAlgorithmTest.h"
 
 const char *names = "rstuvwxy";
-
+/*
 template <typename Graph>
 struct MyBFSVisitor {
     using Node = typename Graph::node_descriptor;
@@ -79,4 +79,4 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     for (auto i = ni.first; i != ni.second; ++i) {
         std::cout << names[*i] << std::endl;
     }
-}
+}*/
