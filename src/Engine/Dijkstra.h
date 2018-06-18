@@ -30,10 +30,35 @@ struct Dijkstra {
         for (; it != m_frontier.end(); ++it)
             if (*it != nullptr)
                 delete *it;
+
+        it = m_shortestPathTree.begin();
+
+        for (; it != m_shortestPathTree.end(); ++it) {
+            if (*it != nullptr)
+                delete *it;
+        }
+    }
+
+    std::vector<const Edge*> getSPT() const {
+        return m_shortestPathTree;
     }
 
     std::list<Node> getPathToTarget() const {
-        return std::list<Node>();
+        std::list<Node> path;
+
+        if (m_target < 0) return path;
+
+        Node nd = m_target;
+
+        path.push_front(nd);
+
+        while ((nd != m_source) && (m_shortestPathTree[nd] != nullptr))
+        {
+            nd = m_shortestPathTree[nd]->source();
+            path.push_front(nd);
+        }
+
+        return path;
     }
     cost_t getCostToTarget() const { return m_costToThisNode[m_target]; }
     cost_t getCostToNode(Node n) const { return m_costToThisNode[n]; }
@@ -54,27 +79,42 @@ private:
 
 template<typename TGraph, typename TCost>
 void Dijkstra<TGraph, TCost>::search() {
-    PriorityQueue<TCost> pq(m_costToThisNode, m_graph.num_nodes());
+    PriorityQueue<TCost> q(m_costToThisNode, m_graph.num_nodes());
 
-    pq.insert(m_source);
+    q.insert(m_source);
 
-    while (!pq.empty()) {
-        Node nextClosestNode = pq.pop();
+    while (!q.empty()) {
+        Node nextClosestNode = q.pop();
+
+        m_shortestPathTree[nextClosestNode] = m_frontier[nextClosestNode];
 
         if (nextClosestNode == m_target) return;
 
         typename TGraph::out_edge_iterator ei, ei_end;
         std::tie(ei, ei_end) = m_graph.out_edges(nextClosestNode);
         for (auto i = ei; i != ei_end; ++i) {
+            /*
+             * die Gesamtkosten zu diesem Knoten sind die Kosten des aktuellen Knotens
+             * plus den Kosten der Kante welche sie verbindet.
+             */
             TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
+
+            // füge neu entdeckte Kanten hinzu.
             if (m_frontier[(*i).target()] == nullptr)
             {
                 m_costToThisNode[(*i).target()] = newCost;
-                pq.insert((*i).target());
+                q.insert((*i).target());
                 m_frontier[(*i).target()] = new Edge(*i);
             }
-            else
-                relax_edge<TGraph>(*i, m_costToThisNode);
+            // relaxieren Kanten.
+            else if ((newCost < m_costToThisNode[(*i).target()]) &&
+                    (m_shortestPathTree[(*i).target()] == nullptr)) {
+                m_costToThisNode[(*i).target()] = newCost;
+
+                // sortiere queue neu, wenn sich die Kosten ändern.
+                q.change_priority((*i).target());
+                m_frontier[(*i).target()] = new Edge(*i);
+            }
         }
     }
 }

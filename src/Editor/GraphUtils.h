@@ -122,7 +122,7 @@ struct GraphGridHelper {
 
     template <typename TGraph, typename TCost>
     static void WeightGraphEdges(TGraph& g, typename TGraph::node_descriptor node, TCost weight) {
-        auto ei = g.edges();
+        auto ei = g.out_edges(node);
 
         for (auto i = ei.first; i != ei.second; ++i) {
             float distance = Distance(g.get((*i).source()),

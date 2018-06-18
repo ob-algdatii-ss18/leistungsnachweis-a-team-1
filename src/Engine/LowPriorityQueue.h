@@ -4,23 +4,45 @@
 #include <algorithm>
 #include <cassert>
 
+/**
+ * Gib den Eltern Index   zurück.
+ * @param i
+ * @return
+ */
 inline static int parent(int i) {
     return i/2;
 }
 
+/**
+ * Gib den Index des Linken Kind Elements zurück
+ * @param i
+ * @return
+ */
 inline static int left(int i) {
     return 2*i;
 }
 
+/**
+ * Gibt den Index des rechten Kind Elements zurück.
+ * @param i
+ * @return
+ */
 inline static int right(int i) {
     return 2*i + 1;
 }
 
+/**
+ * Eine Min-Heapsort-Warteschlange.
+ * Sortiert die Knoten-Kosten nach aufsteigender Reihenfolge,
+ * also das niedrigste Element zuerst.
+ * @tparam T
+ */
 template <typename T>
 class PriorityQueue {
 private:
     std::vector<T>& m_data;
     std::vector<int> m_heap;
+    std::vector<int> m_inv_heap;
     int m_size;
     int m_max_size;
 
@@ -28,11 +50,15 @@ public:
 
     void swap(int id1, int id2) {
         std::swap(m_heap[id1], m_heap[id2]);
+
+        m_inv_heap[m_heap[id1]] = id1;
+        m_inv_heap[m_heap[id2]] = id2;
     }
 
     PriorityQueue(std::vector<T>& keys, unsigned int max_size)
             : m_data(keys), m_size(0), m_max_size(max_size) {
         m_heap.assign(max_size+1, 0);
+        m_inv_heap.assign(max_size+1,0);
         }
 
     /**
@@ -41,8 +67,9 @@ public:
      */
     void insert(const int item) {
         assert(m_size+1 <= m_max_size);
+        ++m_size;
         m_heap[m_size] = item;
-        m_size++;
+        m_inv_heap[item] = m_size;
         reorder_upwards(m_size);
     }
 
@@ -65,57 +92,44 @@ public:
      * @return
      */
     int pop() {
-        swap(0, m_size-1);
-        reorder_downwards(0);
+        swap(1, m_size);
+        reorder_downwards(1, m_size-1);
 
-        int ret = m_heap[m_size];
-        --m_size;
-        return ret;
+        return m_heap[m_size--];
     }
 
     void reorder_upwards(int idx) {
         while ((idx > 1) && (m_data[m_heap[parent(idx)]] > m_data[m_heap[idx]])) {
-            std::swap(m_heap[parent(idx)], m_heap[idx]);
+            swap(parent(idx), idx);
 
             idx = parent(idx);
         }
     }
 
-    void reorder_downwards(int idx) {
-        while (left(idx) <= m_size)
+    void change_priority(const int idx) {
+        reorder_upwards(idx);
+    }
+
+    void reorder_downwards(int idx, int size) {
+        while (left(idx) <= size)
         {
-            int l = left(idx);
+            int child = left(idx);
 
-            if ((l < m_max_size) && (m_data[m_heap[l]] > m_data[m_heap[l+1]]))
-                ++l;
+            // bestimme, welches der kind elemente kleiner ist.
+            if ((child < size) && (m_data[m_heap[child]] > m_data[m_heap[child+1]]))
+                ++child;
 
-            if (m_data[m_heap[idx]] > m_data[m_heap[l]])
+            // wenn Eltern-element größer als Kind tausche sie.
+            if (m_data[m_heap[idx]] > m_data[m_heap[child]])
             {
-                swap(l, idx);
-                idx = l;
+                swap(child, idx);
+                idx = child;
             }
 
             else {
                 break;
             }
         }
-    }
-
-    void min_heapify(int i) {
-        int l = left(i);
-        int r = right(i);
-        int maximum;
-
-        if (l <= m_max_size && (m_heap[l]>=m_heap[i]))
-            maximum = l;
-        else
-            maximum = i;
-
-        if (r <= m_max_size && m_heap[r] > m_heap[maximum])
-            maximum = r;
-
-        if (maximum != i)
-            swap(i, maximum);
     }
 };
 #endif //ALOGDAT_LABYRINTH_LOWPRIORITYQUEUE_H

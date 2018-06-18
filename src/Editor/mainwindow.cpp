@@ -2,13 +2,14 @@
 #include "mainwindow.h"
 #include "GraphWidget.h"
 #include "config.h"
+#include "GraphUtils.h"
 
 MainWindow::MainWindow() : m_pGraphWidget(new GraphWidget(Config::NumCellsX, Config::NumCellsY)),
 m_breadthFirstSearchBtn(nullptr), m_dijkstraSearchBtn(nullptr), m_aStarSearchBtn(nullptr) {
     setWindowTitle("Editor");
     setupUi();
-    this->resize(600, 480);
-    setFixedSize(870, 520);
+    this->resize(550, 480);
+    setFixedSize(770, 560);
     setWindowIcon(QIcon(":/astar.png"));
 
     /*
@@ -23,15 +24,15 @@ m_breadthFirstSearchBtn(nullptr), m_dijkstraSearchBtn(nullptr), m_aStarSearchBtn
 
     auto aName = m_dijkstraSearchBtn->objectName();
     connect(m_dijkstraSearchBtn, &QPushButton::clicked, this, [aName, this]() {
-        m_pGraphWidget->createPathDijkstra();
+        m_pGraphWidget->pathDijkstra();
     });
     aName = m_breadthFirstSearchBtn->objectName();
     connect(m_breadthFirstSearchBtn, &QPushButton::clicked, this, [aName, this]() {
-        m_pGraphWidget->createPathBFS();
+        m_pGraphWidget->pathBFS();
     });
     aName = m_aStarSearchBtn->objectName();
     connect(m_aStarSearchBtn, &QPushButton::clicked, this, [aName, this]() {
-        m_pGraphWidget->createPathAStar();
+        m_pGraphWidget->pathAStar();
     });
     connect(m_pGraphWidget, &GraphWidget::changedGraph, this, &MainWindow::updateGraphStats);
 
@@ -68,6 +69,8 @@ m_breadthFirstSearchBtn(nullptr), m_dijkstraSearchBtn(nullptr), m_aStarSearchBtn
     aName = m_applyBtn->objectName();
     connect(m_applyBtn, &QPushButton::clicked, this, [aName, this]() {
         m_pGraphWidget->createGraph(
+                500,
+                500,
                 m_xDimEd->text().toInt(),
                 m_yDimEd->text().toInt());
     });
@@ -87,6 +90,8 @@ void MainWindow::setupUi() {
     m_planarBtn->setCheckable(true);
     m_numEdges = new QLabel(QString::number(m_pGraphWidget->numEdges()));
     m_numNodes = new QLabel(QString::number(m_pGraphWidget->numNodes()));
+    m_totalCost = new QLabel("0");
+    m_totalTime = new QLabel("0");
     m_applyBtn = new QPushButton("Anwenden");
     QRegExp re("[0-9]+");
     QRegExpValidator *validator = new QRegExpValidator(re, this);
@@ -124,8 +129,10 @@ void MainWindow::setupUi() {
     lay3->addWidget(m_numNodes);
     lay4->addWidget(new QLabel("Kanten:"));
     lay4->addWidget(m_numEdges);
-    lay5->addWidget(new QLabel("Total Cost:"));
-    lay6->addWidget(new QLabel("Total Time:"));
+    lay5->addWidget(new QLabel("Gesamt Kosten:"));
+    lay5->addWidget(m_totalCost);
+    lay6->addWidget(new QLabel("Gesamt Zeit:"));
+    lay6->addWidget(m_totalTime);
     vBoxLayout->addLayout(lay);
     vBoxLayout->addLayout(lay1);
     vBoxLayout->addLayout(lay2);
@@ -167,6 +174,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::createMenus() {
     menuBar()->addAction(m_showGraphAct);
+    menuBar()->addAction(m_debugGraphAct);
     menuBar()->addAction(m_aboutAct);
     menuBar()->addAction(m_exitAct);
 }
@@ -175,6 +183,7 @@ void MainWindow::createActions() {
     m_showGraphAct = new QAction(tr("&Graph"), this);
     m_showGraphAct->setStatusTip("Zeigt Kanten und Ecken des Graphen");
     connect(m_showGraphAct, &QAction::triggered, this, &MainWindow::showGraph);
+
 
     m_aboutAct = new QAction(tr("&About"), this);
     m_aboutAct->setStatusTip("Zeige about Informationen an");
@@ -188,6 +197,12 @@ void MainWindow::createActions() {
                        "<a style=color:dodgerblue href=\"https://github.com/ob-algdatii-ss18/leistungsnachweis-a-team-1\">Github</a>");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
+    });
+
+    m_debugGraphAct = new QAction(tr("&Debug"), this);
+    m_debugGraphAct->setStatusTip("Show debug info");
+    connect(m_debugGraphAct, &QAction::triggered, this, [aName,this]() {
+        m_pGraphWidget->printGraph();
     });
 
     m_exitAct = new QAction(tr("&Exit"), this);
@@ -206,6 +221,8 @@ void MainWindow::showGraph() {
 void MainWindow::updateGraphStats(GraphWidget::Graph_t &graph) {
     m_numEdges->setText(QString::number(graph.num_edges()));
     m_numNodes->setText(QString::number(graph.num_nodes()));
+    m_totalCost->setText(QString::number(m_pGraphWidget->getTotalCost()));
+    m_totalTime->setText(QString::number(m_pGraphWidget->getTotalTime()) + QString("ns"));
 }
 
 void MainWindow::setPressedButton(QPushButton *button) {

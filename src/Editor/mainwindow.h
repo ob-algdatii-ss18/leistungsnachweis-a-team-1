@@ -29,6 +29,7 @@ private:
 	QMenu *m_showMenu;
 	QAction *m_showGraphAct;
 	QAction *m_aboutAct;
+	QAction *m_debugGraphAct;
 	QAction *m_exitAct;
 	QPushButton *m_breadthFirstSearchBtn;
 	QPushButton *m_dijkstraSearchBtn;
@@ -45,4 +46,6 @@ private:
 	QLineEdit *m_yDimEd;
 	QLabel *m_numNodes;
 	QLabel *m_numEdges;
+	QLabel *m_totalCost;
+	QLabel *m_totalTime;
 };

@@ -47,8 +47,8 @@ GraphWidget::GraphWidget(int xNum, int yNum) : m_showGraph(false), m_cellWidth(0
                                                m_curTerrain(field_type::planar),
                                                m_sourceField(0), m_targetField(0) {
     QSize size = this->size();
-    setFixedSize(size.width(), size.height());
-    createGraph(xNum, yNum);
+    setFixedSize(500, 500);
+    createGraph(500, 500, xNum, yNum);
 }
 
 void GraphWidget::paintEvent(QPaintEvent *event) {
@@ -97,6 +97,16 @@ void GraphWidget::paintEvent(QPaintEvent *event) {
 
     if (m_showGraph)
         GraphGridHelper::Draw(painter, m_graph);
+
+    /*for (unsigned int s = 0; s < m_subTree.size(); ++s) {
+        if (m_subTree[s]) {
+            Vector2f from = m_graph.get(m_subTree[s]->source());
+            Vector2f to = m_graph.get(m_subTree[s]->target());
+
+            painter.setPen(QPen(QColor(255, 0, 0), 3));
+            painter.drawLine(from.x, from.y, to.x, to.y);
+        }
+    }*/
 
     // Draw path to target field.
     if (!m_path.empty()) {
@@ -157,19 +167,18 @@ void GraphWidget::emitChangedGraph() {
     emit changedGraph(m_graph);
 }
 
-void GraphWidget::createGraph(int numX, int numY) {
-    QSize size = this->size();
-    m_cellWidth = static_cast<float>(size.width()) / numX;
-    m_cellHeight = static_cast<float>(size.height()) / numY;
+void GraphWidget::createGraph(int width, int height, int numX, int numY) {
+    m_cellWidth = static_cast<float>(width) / numX;
+    m_cellHeight = static_cast<float>(height) / numY;
     m_numCellsX = numX;
     m_numCellsY = numY;
-    GraphGridHelper::Create(m_graph, m_terrain, size.width(), size.height(), numX, numY);
+    GraphGridHelper::Create(m_graph, m_terrain, width, height, numX, numY);
     m_targetField = m_graph.num_nodes() - 1;
     emitChangedGraph();
     repaint();
 }
 
-void GraphWidget::createPathAStar() {
+void GraphWidget::pathAStar() {
     m_currAlgorithm = algorithm_type::search_astar;
     m_path.clear();
 
@@ -181,7 +190,7 @@ void GraphWidget::createPathAStar() {
     repaint();
 }
 
-void GraphWidget::createPathBFS() {
+void GraphWidget::pathBFS() {
     m_currAlgorithm = algorithm_type::search_bfs;
     m_path.clear();
 
@@ -195,7 +204,7 @@ void GraphWidget::createPathBFS() {
     repaint();
 }
 
-void GraphWidget::createPathDijkstra() {
+void GraphWidget::pathDijkstra() {
     m_currAlgorithm = algorithm_type::search_dijkstra;
     m_path.clear();
 
@@ -203,10 +212,11 @@ void GraphWidget::createPathDijkstra() {
     watch.start();
 
     Dijkstra<Graph_t, float> dijk(m_graph, m_sourceField, m_targetField);
-    m_path = dijk.getPathToTarget();
-
     watch.stop();
     m_elapsedTime = watch.elapsedTime();
+    m_path = dijk.getPathToTarget();
+    m_subTree = dijk.getSPT();
+    m_costToTarget = dijk.getCostToTarget();
     repaint();
 }
 
@@ -253,15 +263,20 @@ void GraphWidget::updateAlgorithm() {
         case algorithm_type::none:
             break;
         case algorithm_type::search_astar:
-            createPathAStar();
+            pathAStar();
             break;
         case algorithm_type::search_bfs:
-            createPathBFS();
+            pathBFS();
             break;
         case algorithm_type::search_dijkstra:
-            createPathDijkstra();
+            pathDijkstra();
             break;
         default: break;
     }
+    emitChangedGraph();
+}
+
+void GraphWidget::printGraph() {
+    GraphGridHelper::printGraphDebugInfo(m_graph);
 }
 

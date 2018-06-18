@@ -29,6 +29,7 @@ class GraphWidget : public QWidget {
 public:
     using Graph_t = Graph<Vector2f, float>;
     using Node = Graph_t::node_descriptor;
+    using Edge = Graph_t::edge_descriptor;
     GraphWidget(int xNum, int yNum);
 
     void paintEvent(QPaintEvent*) override;
@@ -51,15 +52,19 @@ public:
         return m_graph.num_edges();
     }
 
-    void createGraph(int xdim, int ydim);
+    void createGraph(int width, int height, int xdim, int ydim);
 
-    void createPathDijkstra();
-    void createPathBFS();
-    void createPathAStar();
+    void pathDijkstra();
+    void pathBFS();
+    void pathAStar();
 
     float getTerrainCost(const field_type field);
 
     void updateGraphFromTerrain(Node n, field_type field);
+    void printGraph();
+
+    double getTotalTime() const { return m_elapsedTime; }
+    double getTotalCost() const { return m_costToTarget; }
 
     signals:
     void changedGraph(Graph_t& graph);
@@ -76,6 +81,7 @@ private:
     Graph_t::NodeMap<field_type> m_terrain;
     int m_numCellsX, m_numCellsY;
     std::list<Node> m_path;
+    std::vector<const Edge*> m_subTree;
     Node m_sourceField;
     Node m_targetField;
     double m_costToTarget;
