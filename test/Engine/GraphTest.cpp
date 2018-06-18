@@ -2,7 +2,7 @@
 
 #include <Graph.h>
 
-TEST_F(GraphTest, IntegerRangeTest) {
+/*TEST_F(GraphTest, IntegerRangeTest) {
     auto it = Integer_range<int>(0, 100);
 
     for (auto i : it) {
@@ -211,5 +211,5 @@ TEST_F(GraphTest, UndirectedGraphTest) {
     std::copy(ei.first, ei.second, std::ostream_iterator<graph_t ::edge_descriptor>{
             std::cout, "\n"}
     );
-}
+}*/
 
