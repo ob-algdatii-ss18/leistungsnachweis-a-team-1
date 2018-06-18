@@ -11,11 +11,11 @@ TEST_F(PriorityQueueTest, insert) {
     data.push_back(3);
     PriorityQueue<int> q(data, 10);
 
+    q.insert(0);
     q.insert(1);
     q.insert(2);
     q.insert(3);
     q.insert(4);
-    q.insert(5);
 
     for (int i = 0; i < 5; i++)
     {
