@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <Timer.h>
 #include <Dijkstra.h>
+#include <AStar.h>
 #include "GraphUtils.h"
 #include "config.h"
 #include "BreadthFirstSearch.h"
@@ -46,7 +47,6 @@ GraphWidget::GraphWidget(int xNum, int yNum) : m_showGraph(false), m_cellWidth(0
                                                m_currAlgorithm(algorithm_type::none),
                                                m_curTerrain(field_type::planar),
                                                m_sourceField(0), m_targetField(0) {
-    QSize size = this->size();
     setFixedSize(500, 500);
     createGraph(500, 500, xNum, yNum);
 }
@@ -110,7 +110,7 @@ void GraphWidget::paintEvent(QPaintEvent *event) {
 
     // Draw path to target field.
     if (!m_path.empty()) {
-        painter.setPen(QPen(QColor(0, 255, 0), 3));
+        painter.setPen(QPen(QColor(255, 255, 0), 3));
         auto it = m_path.begin();
         auto next = it; ++next;
 
@@ -178,6 +178,16 @@ void GraphWidget::createGraph(int width, int height, int numX, int numY) {
     repaint();
 }
 
+// Die euklidische Distanz als Heuristik.
+template<typename TCost>
+class HEuclid {
+public:
+    template <typename TGraph>
+    static TCost get(const TGraph& g, typename TGraph::node_descriptor n1, typename TGraph::node_descriptor n2) {
+        return Distance(g.get(n1), g.get(n2));
+    }
+};
+
 void GraphWidget::pathAStar() {
     m_currAlgorithm = algorithm_type::search_astar;
     m_path.clear();
@@ -185,8 +195,14 @@ void GraphWidget::pathAStar() {
     stopwatch watch;
     watch.start();
 
+    AStar_Search<Graph_t, float, HEuclid<float>> astar(m_graph, m_sourceField, m_targetField);
+
     watch.stop();
+
     m_elapsedTime = watch.elapsedTime();
+    m_costToTarget = astar.getCostToTarget();
+    m_path = astar.getPathToTarget();
+    emitChangedGraph();
     repaint();
 }
 
@@ -201,6 +217,7 @@ void GraphWidget::pathBFS() {
     m_elapsedTime = watch.elapsedTime();
 
     m_costToTarget = 0.0;
+    emitChangedGraph();
     repaint();
 }
 
@@ -217,6 +234,7 @@ void GraphWidget::pathDijkstra() {
     m_path = dijk.getPathToTarget();
     m_subTree = dijk.getSPT();
     m_costToTarget = dijk.getCostToTarget();
+    emitChangedGraph();
     repaint();
 }
 
