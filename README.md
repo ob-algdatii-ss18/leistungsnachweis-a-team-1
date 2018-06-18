@@ -8,4 +8,4 @@ This program implements the [A* Algorithm](https://en.wikipedia.org/wiki/A*_sear
 ## Build
 First you have to download and install [Qt](https://www.qt.io/download) on your computer. At least version 5.10.1 is required. Then you have to adjust the Qt-Path in the file "CMakeLists.txt" (e.g. set(CMAKE_PREFIX_PATH "F:\\LIBRARIES\\Qt\\5.10.1\\mingw53_32;")).
 
-## Documentation
+## [Documentation](https://ob-algdatii-ss18.github.io/leistungsnachweis-a-team-1/doxygen/html/)
