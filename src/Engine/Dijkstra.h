@@ -52,11 +52,11 @@ struct Dijkstra {
 
         path.push_front(nd);
 
-        /*while ((nd != m_source) && (m_shortestPathTree[nd] != nullptr))
+        while ((nd != m_source) && (m_shortestPathTree[nd] != nullptr))
         {
             nd = m_shortestPathTree[nd]->source();
             path.push_front(nd);
-        }*/
+        }
 
         return path;
     }
@@ -83,7 +83,7 @@ void Dijkstra<TGraph, TCost>::search() {
 
     q.insert(m_source);
 
-    while (!q.empty()) {
+    /*while (!q.empty()) {
         Node nextClosestNode = q.pop();
 
         m_shortestPathTree[nextClosestNode] = m_frontier[nextClosestNode];
@@ -93,10 +93,10 @@ void Dijkstra<TGraph, TCost>::search() {
         typename TGraph::out_edge_iterator ei, ei_end;
         std::tie(ei, ei_end) = m_graph.out_edges(nextClosestNode);
         for (auto i = ei; i != ei_end; ++i) {
-            /*
+            *
              * die Gesamtkosten zu diesem Knoten sind die Kosten des aktuellen Knotens
              * plus den Kosten der Kante welche sie verbindet.
-             */
+             *
             TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
 
             // füge neu entdeckte Kanten hinzu.
@@ -116,7 +116,7 @@ void Dijkstra<TGraph, TCost>::search() {
                 m_frontier[(*i).target()] = new Edge(*i);
             }
         }
-    }
+    }*/
 }
 
 #endif //ALOGDAT_LABYRINTH_DIJKSTRA_H
