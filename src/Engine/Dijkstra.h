@@ -30,13 +30,7 @@ struct Dijkstra {
     ~Dijkstra() {
         typename std::vector<const Edge*>::iterator it = m_frontier.begin();
         for (; it != m_frontier.end(); ++it)
-            if (*it != nullptr)
-                delete *it;
-
-        it = m_shortestPathTree.begin();
-
-        for (; it != m_shortestPathTree.end(); ++it) {
-            if (*it != nullptr)
+            if (*it != nullptr) {
                 delete *it;
         }
     }
