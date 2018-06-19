@@ -18,6 +18,14 @@ env:
     - export COVERALLS_REPO_TOKEN=KQ14UwDkm2k8cbB4YZS61pL1GECbMPG2V
 
 before_install:
+    - ulimit -c
+    - ulimit -a -S
+    - ulimit -a -H
+    - cat /proc/sys/kernel/core_pattern
+    - cat /etc/default/apport
+    - service --status-all || true
+    - initctl list || true
+
     # Add and update Qt 5.10.1 Repository
     - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
     - sudo apt-get update -qq

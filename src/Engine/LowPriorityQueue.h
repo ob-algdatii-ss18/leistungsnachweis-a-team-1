@@ -77,7 +77,7 @@ public:
         std::cout << "s inv heap" << std::endl;
         m_inv_heap[item] = m_size;
         std::cout << "reorder" << std::endl;
-        //reorder_upwards(m_size);
+        reorder_upwards(m_size);
         std::cout << "ready" << std::endl;
     }
 
