@@ -4,7 +4,7 @@
 #include <iostream>
 #include "GraphAlgorithmTest.h"
 
-const char *names = "rstuvwxy";
+const char *names = "sytxz";
 
 template <typename Graph>
 struct MyBFSVisitor {
@@ -58,7 +58,7 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     using graph_t = Graph_base<uint32_t, int>;
     enum { s, y, t, x, z, N};
 
-    graph_t g(false);
+    graph_t g(true);
     
     g.add_edge(s, y, 5);
     g.add_edge(s, t, 10);
@@ -72,11 +72,9 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     g.add_edge(t, y, 2);
     
     Dijkstra<graph_t, int> dijk(g, s, x);
-    dijk.getPathToTarget();
+    std::list<graph_t::node_descriptor> path = dijk.getPathToTarget();
     
-    auto ni = g.nodes();
-
-    for (auto i = ni.first; i != ni.second; ++i) {
+    for (auto i = path.begin(); i != path.end(); ++i) {
         std::cout << names[*i] << std::endl;
     }
 }
