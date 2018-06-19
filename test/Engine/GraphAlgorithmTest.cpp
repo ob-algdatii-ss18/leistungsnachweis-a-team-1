@@ -66,6 +66,7 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     g.add_edge(t, y, 2);
     
     Dijkstra<graph_t, int> dijk(g, s, t);
+    std::cout << "dijk initialized" << std::endl;
     /*dijk.getPathToTarget();
     
     auto ni = g.nodes();

@@ -24,6 +24,7 @@ struct Dijkstra {
               m_source(source),
               m_target(target) {
         search();
+        std::cout << "constr ready" << std::endl;
     }
 
     ~Dijkstra() {
@@ -128,7 +129,9 @@ void Dijkstra<TGraph, TCost>::search() {
             }
             std::cout << "check ready" << std::endl;
         }
+        std::cout << "for ready" << std::endl;
     }
+    std::cout << "search ready" << std::endl;
 }
 
 #endif //ALOGDAT_LABYRINTH_DIJKSTRA_H
