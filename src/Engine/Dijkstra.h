@@ -101,8 +101,8 @@ void Dijkstra<TGraph, TCost>::search() {
             // füge neu entdeckte Kanten hinzu.
             if (m_frontier[(*i).target()] == nullptr)
             {
-                /*m_costToThisNode[(*i).target()] = newCost;
-                q.insert((*i).target());*/
+                //m_costToThisNode[(*i).target()] = newCost;
+                q.insert((*i).target());
                 m_frontier[(*i).target()] = new Edge(*i);
             }
             // relaxieren Kanten.
