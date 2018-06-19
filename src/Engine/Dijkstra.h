@@ -101,6 +101,7 @@ void Dijkstra<TGraph, TCost>::search() {
             TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
             t = newCost*2;
             t++;
+            q.change_priority((*i).target());
             // füge neu entdeckte Kanten hinzu.
             /*if (m_frontier[(*i).target()] == nullptr)
             {
