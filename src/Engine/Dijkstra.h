@@ -82,8 +82,9 @@ void Dijkstra<TGraph, TCost>::search() {
     PriorityQueue<TCost> q(m_costToThisNode, m_graph.num_nodes());
 
     q.insert(m_source);
+    int t = 0;
 
-    /*while (!q.empty()) {
+    while (!q.empty()) {
         Node nextClosestNode = q.pop();
 
         m_shortestPathTree[nextClosestNode] = m_frontier[nextClosestNode];
@@ -93,14 +94,15 @@ void Dijkstra<TGraph, TCost>::search() {
         typename TGraph::out_edge_iterator ei, ei_end;
         std::tie(ei, ei_end) = m_graph.out_edges(nextClosestNode);
         for (auto i = ei; i != ei_end; ++i) {
-            *
+            /*
              * die Gesamtkosten zu diesem Knoten sind die Kosten des aktuellen Knotens
              * plus den Kosten der Kante welche sie verbindet.
-             *
+             */
             TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
-
+            t = newCost*2;
+            t++;
             // füge neu entdeckte Kanten hinzu.
-            if (m_frontier[(*i).target()] == nullptr)
+            /*if (m_frontier[(*i).target()] == nullptr)
             {
                 m_costToThisNode[(*i).target()] = newCost;
                 q.insert((*i).target());
@@ -114,9 +116,9 @@ void Dijkstra<TGraph, TCost>::search() {
                 // sortiere queue neu, wenn sich die Kosten ändern.
                 q.change_priority((*i).target());
                 m_frontier[(*i).target()] = new Edge(*i);
-            }
+            }*/
         }
-    }*/
+    }
 }
 
 #endif //ALOGDAT_LABYRINTH_DIJKSTRA_H
