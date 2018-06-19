@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 
 /**
  * Gib den Eltern Index   zurück.
@@ -66,11 +67,18 @@ public:
      * @param index
      */
     void insert(const int item) {
+        std::cout << "insert" << std::endl;
+        std::cout << "assert" << std::endl;
         assert(m_size+1 <= m_max_size);
+        std::cout << "inc" << std::endl;
         ++m_size;
+        std::cout << "sheap" << std::endl;
         m_heap[m_size] = item;
+        std::cout << "s inv heap" << std::endl;
         m_inv_heap[item] = m_size;
+        std::cout << "reorder" << std::endl;
         reorder_upwards(m_size);
+        std::cout << "ready" << std::endl;
     }
 
     /**
