@@ -66,11 +66,11 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     g.add_edge(t, y, 2);
     
     Dijkstra<graph_t, int> dijk(g, s, t);
-    dijk.getPathToTarget();
+    /*dijk.getPathToTarget();
     
     auto ni = g.nodes();
 
     for (auto i = ni.first; i != ni.second; ++i) {
         std::cout << names[*i] << std::endl;
-    }
+    }*/
 }
