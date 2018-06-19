@@ -82,7 +82,6 @@ void Dijkstra<TGraph, TCost>::search() {
     PriorityQueue<TCost> q(m_costToThisNode, m_graph.num_nodes());
 
     q.insert(m_source);
-    int t = 0;
 
     while (!q.empty()) {
         Node nextClosestNode = q.pop();
@@ -99,18 +98,15 @@ void Dijkstra<TGraph, TCost>::search() {
              * plus den Kosten der Kante welche sie verbindet.
              */
             TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
-            t = newCost*2;
-            t++;
-            q.change_priority((*i).target());
             // füge neu entdeckte Kanten hinzu.
-            /*if (m_frontier[(*i).target()] == nullptr)
+            if (m_frontier[(*i).target()] == nullptr)
             {
                 m_costToThisNode[(*i).target()] = newCost;
                 q.insert((*i).target());
                 m_frontier[(*i).target()] = new Edge(*i);
             }
             // relaxieren Kanten.
-            else if ((newCost < m_costToThisNode[(*i).target()]) &&
+            /*else if ((newCost < m_costToThisNode[(*i).target()]) &&
                     (m_shortestPathTree[(*i).target()] == nullptr)) {
                 m_costToThisNode[(*i).target()] = newCost;
 
