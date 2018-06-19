@@ -52,11 +52,11 @@ struct Dijkstra {
 
         path.push_front(nd);
 
-        while ((nd != m_source) && (m_shortestPathTree[nd] != nullptr))
+        /*while ((nd != m_source) && (m_shortestPathTree[nd] != nullptr))
         {
             nd = m_shortestPathTree[nd]->source();
             path.push_front(nd);
-        }
+        }*/
 
         return path;
     }
