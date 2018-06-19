@@ -30,13 +30,6 @@ struct Dijkstra {
         for (; it != m_frontier.end(); ++it)
             if (*it != nullptr)
                 delete *it;
-
-        it = m_shortestPathTree.begin();
-
-        for (; it != m_shortestPathTree.end(); ++it) {
-            if (*it != nullptr)
-                delete *it;
-        }
     }
 
     std::vector<const Edge*> getSPT() const {
