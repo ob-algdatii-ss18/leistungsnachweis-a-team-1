@@ -58,7 +58,7 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     using graph_t = Graph_base<uint32_t, int>;
     enum { s, y, t ,N};
 
-    graph_t g(false);
+    graph_t g(true);
     
     g.add_edge(s, y, 5);
     //g.add_edge(s, t, 10);
