@@ -25,7 +25,7 @@ struct MyBFSVisitor {
         g.put(e.target(), distance + 1);
     }
 };
-/*
+
 TEST_F(GraphAlgorithmTest, BreadthFirstSearch) {
     using graph_t = Graph_base<uint32_t, no_property>;
     enum { r, s, t, u, v, w, x, y, N};
@@ -53,7 +53,7 @@ TEST_F(GraphAlgorithmTest, BreadthFirstSearch) {
         std::cout << names[*i] << g.get(*i) << std::endl;
     }
 }
-
+/*
 TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     using graph_t = Graph_base<uint32_t, int>;
     enum { s, y, t, x, z, N};
