@@ -53,25 +53,19 @@ TEST_F(GraphAlgorithmTest, BreadthFirstSearch) {
         std::cout << names[*i] << g.get(*i) << std::endl;
     }
 }
-/*
+
 TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     using graph_t = Graph_base<uint32_t, int>;
-    enum { s, y, t, x, z, N};
+    enum { s, y, t ,N};
 
     graph_t g(false);
     
     g.add_edge(s, y, 5);
-    g.add_edge(s, t, 10);
+    //g.add_edge(s, t, 10);
     g.add_edge(y, t, 3);
-    g.add_edge(y, z, 2);
-    g.add_edge(z, x, 6);
-    g.add_edge(x, z, 4);
-    g.add_edge(t, x, 1);
-    g.add_edge(z, s, 7);
-    g.add_edge(y, x, 9);
     g.add_edge(t, y, 2);
     
-    Dijkstra<graph_t, int> dijk(g, s, x);
+    Dijkstra<graph_t, int> dijk(g, s, t);
     dijk.getPathToTarget();
     
     auto ni = g.nodes();
@@ -79,4 +73,4 @@ TEST_F(GraphAlgorithmTest, DijkstraSearch) {
     for (auto i = ni.first; i != ni.second; ++i) {
         std::cout << names[*i] << std::endl;
     }
-}*/
+}
