@@ -2,6 +2,7 @@
 #define ALOGDAT_LABYRINTH_DIJKSTRA_H
 
 #include <LowPriorityQueue.h>
+#include <iostream>
 
 template <typename TGraph, typename TCost>
 void relax_edge(typename TGraph::edge_descriptor edge, std::vector<TCost>& cost) {
@@ -97,23 +98,35 @@ void Dijkstra<TGraph, TCost>::search() {
              * die Gesamtkosten zu diesem Knoten sind die Kosten des aktuellen Knotens
              * plus den Kosten der Kante welche sie verbindet.
              */
-            //TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
+            TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
             // füge neu entdeckte Kanten hinzu.
+
+            std::cout << "check" << std::endl;
             if (m_frontier[(*i).target()] == nullptr)
             {
-                //m_costToThisNode[(*i).target()] = newCost;
+
+                std::cout << "scost" << std::endl;
+                m_costToThisNode[(*i).target()] = newCost;
+                std::cout << "cinsert" << std::endl;
                 q.insert((*i).target());
+                std::cout << "new Edge" << std::endl;
                 m_frontier[(*i).target()] = new Edge(*i);
             }
             // relaxieren Kanten.
-            /*else if ((newCost < m_costToThisNode[(*i).target()]) &&
+            else if ((newCost < m_costToThisNode[(*i).target()]) &&
                     (m_shortestPathTree[(*i).target()] == nullptr)) {
+                std::cout << "relax" << std::endl;
                 m_costToThisNode[(*i).target()] = newCost;
 
                 // sortiere queue neu, wenn sich die Kosten ändern.
+
+                std::cout << "sort" << std::endl;
                 q.change_priority((*i).target());
+
+                std::cout << "new Edge2" << std::endl;
                 m_frontier[(*i).target()] = new Edge(*i);
-            }*/
+            }
+            std::cout << "check ready" << std::endl;
         }
     }
 }
