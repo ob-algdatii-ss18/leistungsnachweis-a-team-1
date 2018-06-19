@@ -97,12 +97,12 @@ void Dijkstra<TGraph, TCost>::search() {
              * die Gesamtkosten zu diesem Knoten sind die Kosten des aktuellen Knotens
              * plus den Kosten der Kante welche sie verbindet.
              */
-            TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
+            //TCost newCost = m_costToThisNode[nextClosestNode] + m_graph.get(*i);
             // füge neu entdeckte Kanten hinzu.
             if (m_frontier[(*i).target()] == nullptr)
             {
-                m_costToThisNode[(*i).target()] = newCost;
-                q.insert((*i).target());
+                /*m_costToThisNode[(*i).target()] = newCost;
+                q.insert((*i).target());*/
                 m_frontier[(*i).target()] = new Edge(*i);
             }
             // relaxieren Kanten.
