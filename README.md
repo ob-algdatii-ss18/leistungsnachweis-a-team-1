@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/ob-algdatii-ss18/leistungsnachweis-a-team-1.svg?branch=master)](https://travis-ci.org/ob-algdatii-ss18/leistungsnachweis-a-team-1)
 [![Coverage Status](https://coveralls.io/repos/github/ob-algdatii-ss18/leistungsnachweis-a-team-1/badge.svg?branch=testing)](https://coveralls.io/github/ob-algdatii-ss18/leistungsnachweis-a-team-1?branch=testing)
 
+![Der A Stern Editor](https://github.com/ob-algdatii-ss18/leistungsnachweis-a-team-1/editor.png "Der A Star Editor")
 ## Description
 This program implements the [A* Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) for an undirected Graph in C++. In order to visualize the operation there is a GUI where you can alter the graph. You can change the size and the costs of the edges for example. In order to compare the algorithm with alternatives, you can execute Dijkstra and BFS, too.
 
